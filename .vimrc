@@ -26,6 +26,9 @@ colorscheme darkluma
 set lbr
 set number
 
+" Backup Settings
+set backupdir=~/.vim_backup
+
 " Tab Width
 " On pressing tab, insert 2 spaces
 set expandtab
@@ -34,4 +37,10 @@ set tabstop=2
 set softtabstop=2
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
+
+" Whitespace Visibility
+" Show trailing whitespace and eol
+set listchars=trail:~,eol:¬
+" Set visible
+set list
 
