@@ -1,0 +1,10 @@
+[user]
+  name = stegnerw
+  email = stegnerwayne@gmail.com
+
+[push]
+  default = simple
+
+[core]
+  excludesfile = ~/.gitignore
+  editor = vim
