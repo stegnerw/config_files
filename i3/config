@@ -248,13 +248,8 @@ client.background	$bg
 
 # start dmenu (a program launcher)
 # PROTIP: You can also dynamically set dmenu's colors this way:
-# bindsym $mod+d exec dmenu_run -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"
-#bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"'
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"'
+#bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 ## Manual managment of external displays
 set $mode_hdmi_display Extra Screen: HDMI | (r) Right, (l) Left, (a) above, (b) below, (s) Same, (x) Off
@@ -287,9 +282,9 @@ mode "$mode_workspace_display" {
 bindsym $mod+m mode "$mode_workspace_display"
 
 # Window transparency
-#bindsym $mod+t exec --no-startup-id ~/.bin/devilspie_transparency_compton_trans.sh
+bindsym $mod+t exec --no-startup-id ~/.bin/devilspie_transparency_compton_trans.sh
 # Change wallpaper
-#bindsym $mod+shift+t exec --no-startup-id ~/.bin/change_background.sh
+bindsym $mod+shift+t exec --no-startup-id ~/.bin/change_background.sh
 
 # Volume control
 bindcode 121 exec --no-startup-id pulsemixer --toggle-mute
