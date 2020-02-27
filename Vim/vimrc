@@ -12,6 +12,16 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugins
 " Colors
 Plugin 'xdg/vim-darkluma'
+" Code Commenting Out
+Plugin 'scrooloose/nerdcommenter'
+" Code Completion
+Plugin 'ycm-core/YouCompleteMe'
+" Hex Editing
+Plugin 'fidian/hexmode'
+" Syntax Highlighting
+Plugin 's3rvac/vim-syntax-retdecdsm'
+" Code linting
+Plugin 'tjdevries/overlength.vim'
 
 " All plugins must be added before the following line
 call vundle#end()
@@ -25,6 +35,9 @@ colorscheme darkluma
 " Line Settings
 set lbr
 set number
+
+" Leader Settings
+let mapleader = ","
 
 " Backup Settings
 set backupdir=~/.vim_backup
