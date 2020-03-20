@@ -1,25 +1,40 @@
 #!/bin/bash
 
-if [ -z $1 ]; then
-  echo "Optional argument: $(basename $0) <computer name>"
+# Directory definitions
+BASE_DIR=$(realpath $(dirname "$0"))
+ALIAS_DIR=$HOME/.bash_aliases
+
+# Create necessary directories
+if [ -d $ALIAS_DIR ]; then
+  echo "WARNING: Directory already exists:"
+  echo $ALIAS_DIR
+else
+  mkdir $ALIAS_DIR
 fi
 
-# General files
-ln -s -f $(realpath bashrc) $HOME/.bashrc
-ln -s -f $(realpath profile) $HOME/.profile
-ln -s -f $(realpath Xresources) $HOME/.Xresources
-rm -rf ~/.bash_aliases
-mkdir ~/.bash_aliases
-ln -s -f $(realpath Bash_Aliases/general) $HOME/.bash_aliases/general 
+# Create symlinks
+ln -sf $BASE_DIR/bashrc $HOME/.bashrc
+ln -sf $BASE_DIR/profile $HOME/.profile
+ln -sf $BASE_DIR/Xresources $HOME/.Xresources
+ln -sf $BASE_DIR/Bash_Aliases/general $ALIAS_DIR/general
 
 # Computer specific files
-if [ "Galapagos" = $1 ]; then
-  ln -s -f $(realpath Bash_Aliases/galapagos) $HOME/.bash_aliases/galapagos
-elif [ "Emperor" = $1 ]; then
-  ln -s -f $(realpath Bash_Aliases/emperor) $HOME/.bash_aliases/emperor
-else
-  echo "No valid computer selected - ignoring computer specific files"
-fi
+echo "Which computer (for alias files)?"
+select computer in "Galapagos" "Emperor" "None"; do
+  case $computer in
+    Galapagos)
+      ln -sf $BASE_DIR/Bash_Aliases/galapagos $ALIAS_DIR/galapagos
+      break
+      ;;
+    Emperor)
+      ln -sf $BASE_DIR/Bash_Aliases/emperor $ALIAS_DIR/emperor
+      break
+      ;;
+    None)
+      break
+      ;;
+  esac
+done
 
 exit 0
 

@@ -1,24 +1,37 @@
 #!/usr/bin/env bash
 
+
 # Document Management
 exec dropbox start &
+
 # Lock Screen
 exec xss-lock -- ~/.bin/transfer-sleep-lock-i3lock.sh &
+
 # Messaging
 exec discord &
 exec slack &
+
 # Password Management
 exec keepassxc &
+
 # Web browsing
 exec firefox &
+
 # Research
 exec mendeleydesktop &
+
 # Terminal
 exec uxterm &
+
 # Window compositor (for transparency)
 exec compton &
+
 # Screen red shifter
 exec redshift &
+
 # Program for applying special rules for what is and isn't transparent
 exec devilspie -a &
+
+# Set initial background
+exec change_background.sh &
 

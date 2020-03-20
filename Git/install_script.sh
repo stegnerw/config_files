@@ -1,7 +1,11 @@
 #!/bin/bash
 
-ln -s -f $(realpath gitconfig) $HOME/.gitconfig
-ln -s -f $(realpath gitignore) $HOME/.gitignore
+# Directory definitions
+BASE_DIR=$(realpath $(dirname "$0"))
+
+# Create symlinks
+ln -sf $BASE_DIR/gitconfig $HOME/.gitconfig
+ln -sf $BASE_DIR/gitignore $HOME/.gitignore
 
 exit 0
 

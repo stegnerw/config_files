@@ -1,15 +1,22 @@
 #!/bin/bash
 
-# Create .bin folder if it does not exist
-if [ ! -d ~/.bin ]; then
-  mkdir ~/.bin
+# Directory definitions
+BASE_DIR=$(realpath $(dirname "$0"))
+BIN_DIR=$HOME/.bin
+
+# Create necessary directories
+if [ -d $BIN_DIR ]; then
+  echo "WARNING: Directory already exists:"
+  echo $BIN_DIR
+else
+  mkdir $BIN_DIR
 fi
 
-# Add sym links
-ln -s -f $(realpath pixelated_screenshot.sh) $HOME/.bin/pixelated_screenshot.sh
-ln -s -f $(realpath transfer-sleep-lock-i3lock.sh) $HOME/.bin/transfer-sleep-lock-i3lock.sh
-ln -s -f $(realpath change_background.sh) $HOME/.bin/change_background.sh
-ln -s -f $(realpath devilspie_transparency_compton_trans.sh) $HOME/.bin/devilspie_transparency_compton_trans.sh
+# Create symlinks
+ln -sf $BASE_DIR/pixelated_screenshot.sh $BIN_DIR/pixelated_screenshot.sh
+ln -sf $BASE_DIR/transfer-sleep-lock-i3lock.sh $BIN_DIR/transfer-sleep-lock-i3lock.sh
+ln -sf $BASE_DIR/change_background.sh $BIN_DIR/change_background.sh
+ln -sf $BASE_DIR/devilspie_transparency_compton_trans.sh $BIN_DIR/devilspie_transparency_compton_trans.sh
 
 exit 0
 

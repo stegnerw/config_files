@@ -1,6 +1,11 @@
 #!/bin/bash
 
-ln -s -f $(realpath vimrc) $HOME/.vimrc
+# Directory definitions
+BASE_DIR=$(realpath $(dirname "$0"))
+VUNDLE_DIR=$HOME/.vim/bundle/Vundle.vim
+
+# Create symlink
+ln -sf $BASE_DIR/vimrc $HOME/.vimrc
 
 # Install Vundle
 
@@ -10,12 +15,16 @@ if [ -z $(which git) ]; then
   exit 1
 fi
 
-# Install Vundle and plugins
-if [ ! -d ~/.vim/bundle/Vundle.vim ]; then
-  echo "Vundle not found. Cloning from git..."
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+# Install Vundle
+if [ -d VUNDLE_DIR ]; then
+  echo "Vundle already found."
 else
-  echo "Vundle already found. Not cloning from git."
+  echo "Vundle not found. Cloning from git..."
+  git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE_DIR
 fi
+
+# Install plugins
 vim +PluginInstall +qall
+
+exit 0
 
