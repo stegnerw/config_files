@@ -16,7 +16,7 @@ if [ -z $(which git) ]; then
 fi
 
 # Install Vundle
-if [ -d VUNDLE_DIR ]; then
+if [ -d $VUNDLE_DIR ]; then
   echo "Vundle already found."
 else
   echo "Vundle not found. Cloning from git..."
