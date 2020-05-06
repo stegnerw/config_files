@@ -14,7 +14,7 @@ fi
 
 # Create symlinks
 ln -sf $BASE_DIR/xsessionrc $HOME/.xsessionrc
-ln -sf $BASE_DIR/config $CONFIG_DIR/config
+ln -sf $BASE_DIR/config.Emperor $CONFIG_DIR/config
 
 exit 0
 

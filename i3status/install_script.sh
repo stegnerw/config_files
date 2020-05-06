@@ -9,7 +9,7 @@ if [ -d $CONFIG_DIR ]; then
   echo "WARNING: Directory already exists:"
   echo $CONFIG_DIR
 else
-  mkdir $CONFID_DIR
+  mkdir $CONFIG_DIR
 fi
 
 # Create symlink
