@@ -11,7 +11,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
 " Colors
-Plugin 'xdg/vim-darkluma'
+Plugin 'ParamagicDev/vim-medic_chalk'
 " Code Commenting Out
 Plugin 'scrooloose/nerdcommenter'
 " Code Completion
@@ -22,6 +22,8 @@ Plugin 'fidian/hexmode'
 Plugin 's3rvac/vim-syntax-retdecdsm'
 " Code linting
 Plugin 'tjdevries/overlength.vim'
+" LaTeX
+Plugin 'lervag/vimtex'
 
 " All plugins must be added before the following line
 call vundle#end()
@@ -30,11 +32,15 @@ filetype plugin indent on
 
 " Variable Settings
 " Colors
-colorscheme darkluma
+colorscheme medic_chalk
 
 " Line Settings
 set lbr
 set number
+
+" Spell Check
+set spelllang=en
+set spell
 
 " Leader Settings
 let mapleader = ","
@@ -56,4 +62,13 @@ set shiftwidth=2
 set listchars=trail:~,eol:¬
 " Set visible
 set list
+
+" Tex
+" Prevents vim from thinking a tex file is plaintex
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+
+" Order and usage requested by vim-tex
+filetype plugin indent on
+syntax on
 
