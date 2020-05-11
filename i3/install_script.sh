@@ -13,7 +13,7 @@ else
 fi
 
 # Create symlinks
-ln -sf $BASE_DIR/xsessionrc $HOME/.xsessionrc
+ln -sf $BASE_DIR/xsessionrc.Emperor $HOME/.xsessionrc
 ln -sf $BASE_DIR/config.Emperor $CONFIG_DIR/config
 
 exit 0

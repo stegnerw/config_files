@@ -92,26 +92,26 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:1:"
-set $ws2 "2:2:"
+set $ws1 "1:1:"
+set $ws2 "2:2:"
 set $ws3 "3:3:"
-set $ws4 "4:4:"
-set $ws5 "5:5:"
-set $ws6 "6:6"
-set $ws7 "7:7"
-set $ws8 "8:8"
-set $ws9 "9:9"
-set $ws10 "10:10"
-set $ws11 "11:11"
-set $ws12 "12:12"
-set $ws13 "13:13"
-set $ws14 "14:14"
-set $ws15 "15:15"
-set $ws16 "16:16"
-set $ws17 "17:17"
-set $ws18 "18:18"
-set $ws19 "19:19"
-set $ws20 "20:20"
+set $ws4 "4:4:"
+set $ws5 "5:5:"
+set $ws6 "6:6:"
+set $ws7 "7:7:"
+set $ws8 "8:8:"
+set $ws9 "9:9:"
+set $ws10 "10:10:"
+set $ws11 "11:11:"
+set $ws12 "12:12:"
+set $ws13 "13:13:"
+set $ws14 "14:14:"
+set $ws15 "15:15:"
+set $ws16 "16:16:"
+set $ws17 "17:17:"
+set $ws18 "18:18:"
+set $ws19 "19:19:"
+set $ws20 "20:20:"
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -159,18 +159,21 @@ bindsym $mod+Shift+Ctrl+0 move container to workspace $ws20
 
 # Window Assignments
 # Arrow: →
-# Workspace 1: messaging
-assign [class="(?i)discord"] → $ws1
-assign [class="(?i)slack"] → $ws1
-# Workspace 2: Security
-assign [class="(?i)keepassxc"] → $ws2
-# Workspace 3: Reserach
+# Workspace 1: Terminal
+assign [class="(?i)alacritty"] → $ws1
+# Workspace 2: Browsing
+assign [class="(?i)Firefox"] → $ws2
+# Workspace 3: Papers
 assign [class="(?i)mendeley desktop"] → $ws3
-assign [class="(?i)Zotero"] → $ws3
-# Workspace 4: Browsing
-assign [class="(?i)Firefox"] → $ws4
-# Workspace 5: Terminal
-assign [class="(?i)uxterm"] → $ws5
+assign [class="(?i)zotero"] → $ws3
+# Workspace 11: Passwords
+assign [class="(?i)keepassxc"] → $ws11
+# Workspace 12: Music
+assign [class="(?i)spotify"] → $ws12
+# Workspace 13: Discord
+assign [class="(?i)discord"] → $ws13
+# Workspace 14: Slack
+assign [class="(?i)slack"] → $ws14
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -238,19 +241,19 @@ bindcode 160 exec --no-startup-id $Locker
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
 
-# class			border	backgr.	text	indicator	child_border
-client.focused		$bg	$bg	$fg	$bg		$bg
-client.focused_inactive	$bg	$bg	$fg	$bg		$bg
-client.unfocused	$bg	$bg	$fg	$bg		$bg
-client.urgent		$bg	$bg	$fg	$bg		$bg
-client.placeholder	$bg	$bg	$fg	$bg		$bg
+## class			border	backgr.	text	indicator	child_border
+#client.focused		$bg	$bg	$fg	$bg		$bg
+#client.focused_inactive	$bg	$bg	$fg	$bg		$bg
+#client.unfocused	$bg	$bg	$fg	$bg		$bg
+#client.urgent		$bg	$bg	$fg	$bg		$bg
+#client.placeholder	$bg	$bg	$fg	$bg		$bg
 
-client.background	$bg
+#client.background	$bg
 
 # start dmenu (a program launcher)
 # PROTIP: You can also dynamically set dmenu's colors this way:
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"'
-#bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+#bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"'
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 ## Manual managment of external displays
 #set $mode_hdmi_display Extra Screen: HDMI | (r) Right, (l) Left, (a) above, (b) below, (s) Same, (x) Off

@@ -27,5 +27,5 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # Run keychain
-#eval $(keychain --eval -q)
+eval $(keychain --eval -q)
 
