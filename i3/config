@@ -171,6 +171,7 @@ assign [class="(?i)Zotero"] → $ws3
 assign [class="(?i)Firefox"] → $ws4
 # Workspace 5: Terminal
 assign [class="(?i)uxterm"] → $ws5
+assign [class="(?i)alacritty"] → $ws5
 
 # reload the configuration file
 bindsym $mod+Shift+c reload

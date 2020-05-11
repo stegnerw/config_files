@@ -21,7 +21,7 @@ exec firefox &
 exec mendeleydesktop &
 
 # Terminal
-exec uxterm &
+exec alacritty &
 
 # Window compositor (for transparency)
 exec compton &
