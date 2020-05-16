@@ -59,7 +59,7 @@ set shiftwidth=2
 
 " Whitespace Visibility
 " Show trailing whitespace and eol
-set listchars=trail:~,eol:¬
+set listchars=trail:~,tab:\ \ 
 " Set visible
 set list
 
