@@ -1,0 +1,25 @@
+################################################################################
+# ASSIGNS
+################################################################################
+#
+# Workspace assignments
+# Workspace 1: Terminal
+assign [class="(?i)alacritty"] $ws1
+# Workspace 2: Browsing
+assign [class="(?i)Firefox"] $ws2
+# Workspace 3: Papers
+assign [class="(?i)mendeley desktop"] $ws3
+assign [class="(?i)zotero"] $ws3
+# Workspace 11: Passwords
+assign [class="(?i)keepassxc"] $ws11
+# Workspace 12: Music
+# For some reason the Spotify developers did not design their program properly
+# assign does not work because the hints are set after calling MapWindow
+# See: https://github.com/i3/i3/issues/2060
+for_window [instance="(?i)spotify"] move to workspace $ws12
+# Workspace 13: Discord
+assign [class="(?i)discord"] $ws13
+# Workspace 14: Slack
+assign [class="(?i)slack"] $ws14
+
+

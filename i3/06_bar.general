@@ -1,0 +1,9 @@
+################################################################################
+# BAR
+################################################################################
+#
+# Start i3bar to display a workspace/status bar
+bar {
+  status_command          i3status
+  strip_workspace_numbers no
+}
