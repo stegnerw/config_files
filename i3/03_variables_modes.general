@@ -3,7 +3,7 @@
 ################################################################################
 #
 # Font for window titles and bar unless specified otherwise in bar{}
-font pango:Terminus, FontAwesome 10
+font pango:Terminus, FontAwesome 8
 
 # Set $mod key to super (Windows key)
 set $mod Mod4
