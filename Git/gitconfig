@@ -10,14 +10,19 @@
   editor = vim
 
 [alias]
+  ; Shorthand
   co = checkout
   ci = commit
   st = status
   br = branch
-  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  type = cat-file -t
-  dump = cat-file -p
-  lol = log --graph --decorate --pretty=oneline --abbrev-commit
-  ; lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  ; Unstage currently added changes to a file
+  unstage = reset HEAD --
+  ; View last commit info
+  last = log -l HEAD
+  ; Pretty log of commits and branches
   lola = log --graph --decorate --pretty=format:\"%C(yellow)%h %Cred%cr %Cblue(%an)%C(white)%d%Creset %s\" --abbrev-commit --all
+  ; List all bash aliases
+	aliases = config --get-regexp '^alias\\.'
+  ; Create new branch and push to remote
+  newbr = !git checkout -b $1 && git push --set-upstream origin $1 && :
 
