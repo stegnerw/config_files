@@ -70,8 +70,8 @@ font:
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
-#env:
-  #TERM: alacritty
+env:
+  TERM: alacritty
 
 ###############################################################################
 # Window
@@ -214,7 +214,7 @@ cursor:
   #   - ▇ Block
   #   - _ Underline
   #   - | Beam
-  style: Block
+  style: Underline
   # Vi mode cursor style
   # If the vi mode cursor style is `None` or not specified, it will fall back
   # to the style of the active value of the normal cursor.
