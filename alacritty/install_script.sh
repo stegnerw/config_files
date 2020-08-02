@@ -2,7 +2,7 @@
 
 # Directory definitions
 BASE_DIR=$(realpath $(dirname "$0"))
-CONFIG_DIR=$$HOME/.config/alacritty
+CONFIG_DIR=$HOME/.config/alacritty
 
 # Create necessary directories
 for dir in $CONFIG_DIR; do
@@ -12,7 +12,7 @@ for dir in $CONFIG_DIR; do
 done
 
 # Create symlinks
-ln -sf $BASE_DIR/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -sf $BASE_DIR/alacritty.yml $CONFIG_DIR/alacritty.yml
 
 exit 0
 
