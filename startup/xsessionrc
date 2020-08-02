@@ -13,7 +13,7 @@ exec xss-lock -- ~/.bin/transfer-sleep-lock-i3lock.sh &
 exec alacritty &
 
 # Web browsing
-exec firefox &
+exec chromium &
 
 # Research
 exec mendeleydesktop &
@@ -27,6 +27,8 @@ exec spotify &
 # Messaging
 exec discord &
 exec slack &
+exec signal-desktop &
+exec tutanota-desktop-linux.AppImage
 
 # Window compositor (for transparency)
 exec compton &

@@ -6,7 +6,8 @@
 # Workspace 1: Terminal
 assign [class="(?i)alacritty"] $ws1
 # Workspace 2: Browsing
-assign [class="(?i)Firefox"] $ws2
+assign [class="(?i)firefox"] $ws2
+assign [class="(?i)chromium"] $ws2
 # Workspace 3: Papers
 assign [class="(?i)mendeley desktop"] $ws3
 assign [class="(?i)zotero"] $ws3
@@ -21,5 +22,8 @@ for_window [instance="(?i)spotify"] move to workspace $ws12
 assign [class="(?i)discord"] $ws13
 # Workspace 14: Slack
 assign [class="(?i)slack"] $ws14
-
+# Workspace 15: Tutanota (email)
+assign [class="(?i)tutanota-desktop"] $ws15
+# Workspace 16: Signal
+assign [class="(?i)signal"] $ws16
 

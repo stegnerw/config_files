@@ -10,20 +10,24 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
-" Colors
-Plugin 'ParamagicDev/vim-medic_chalk'
-" Code Commenting Out
+" Code commenting out
 Plugin 'scrooloose/nerdcommenter'
-" Code Completion
+" Code completion
 Plugin 'ycm-core/YouCompleteMe'
-" Hex Editing
+" Hex editing
 Plugin 'fidian/hexmode'
-" Syntax Highlighting
+" Syntax highlighting
 Plugin 's3rvac/vim-syntax-retdecdsm'
 " Code linting
 Plugin 'tjdevries/overlength.vim'
 " LaTeX
 Plugin 'lervag/vimtex'
+" NerdFonts
+Plugin 'ryanoasis/vim-devicons'
+" Status bar
+Plugin 'itchyny/lightline.vim'
+" File browsing
+Plugin 'preservim/nerdtree'
 
 " All plugins must be added before the following line
 call vundle#end()
@@ -31,8 +35,8 @@ filetype plugin indent on
 " End Vundle
 
 " Variable Settings
-" Colors
-colorscheme medic_chalk
+" Encoding
+set encoding=UTF-8
 
 " Line Settings
 set lbr
@@ -71,4 +75,11 @@ let g:vimtex_view_method='zathura'
 " Order and usage requested by vim-tex
 filetype plugin indent on
 syntax on
+
+" Lightline
+set laststatus=2
+set noshowmode
+"let g:lightline = {
+      "\ 'colorscheme': 'medic_chalk',
+      "\ }
 
