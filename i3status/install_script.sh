@@ -5,10 +5,7 @@ BASE_DIR=$(realpath $(dirname "$0"))
 CONFIG_DIR=$HOME/.config/i3status
 
 # Create necessary directories
-if [ -d $CONFIG_DIR ]; then
-  echo "WARNING: Directory already exists:"
-  echo $CONFIG_DIR
-else
+if [ ! -d $CONFIG_DIR ]; then
   mkdir $CONFIG_DIR
 fi
 
