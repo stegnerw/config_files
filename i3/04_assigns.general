@@ -20,7 +20,7 @@ assign [class="(?i)keepassxc"] $ws11
 for_window [instance="(?i)spotify"] move to workspace $ws12
 # Workspace 13: Discord
 assign [class="(?i)discord"] $ws13
-for_window [title="(?i)discord"] move to workspace $ws13
+for_window [instance="(?i)discord.com__channels"] move to workspace $ws13
 # Workspace 14: Slack
 assign [class="(?i)slack"] $ws14
 # Workspace 15: Tutanota (email)
