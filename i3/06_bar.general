@@ -6,4 +6,5 @@
 bar {
   status_command          i3status
   strip_workspace_numbers no
+  tray_output             primary
 }
