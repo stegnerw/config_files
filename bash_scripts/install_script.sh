@@ -17,5 +17,8 @@ ln -sf $BASE_DIR/devilspie_transparency_compton_trans.sh $BIN_DIR/devilspie_tran
 ln -sf $BASE_DIR/monitor_setup.sh.emperor $BIN_DIR/monitor_setup.sh
 ln -sf $BASE_DIR/i3_config_merge.sh $BIN_DIR/i3_config_merge.sh
 
+ln -sf $BASE_DIR/notify_pause.sh $BIN_DIR/notify_pause.sh
+ln -sf $BASE_DIR/notify_resume.sh $BIN_DIR/notify_resume.sh
+
 exit 0
 
