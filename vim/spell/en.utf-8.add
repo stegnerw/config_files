@@ -26,3 +26,6 @@ MaV
 config
 ethernet
 EoD
+UC
+SWEC
+Izhikevich
