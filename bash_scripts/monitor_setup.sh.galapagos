@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Fix screen tearing issues
-nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
+#nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
 
 # Set DP-0 as primary
 xrandr --output eDP-1 --primary --mode 2560x1440 --rate 165.00
