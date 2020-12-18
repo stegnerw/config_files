@@ -1,6 +1,7 @@
 [user]
   name = stegnerw
-  email = stegnerwayne@gmail.com
+	email = wayne.stegner@protonmail.com
+	signingkey = 83972C51BBDE2DFF
 
 [push]
   default = simple
@@ -12,7 +13,7 @@
 [alias]
   ; Shorthand
   co = checkout
-  ci = commit
+  ci = commit -S
   st = status
   br = branch
   ; Unstage currently added changes to a file
