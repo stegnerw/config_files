@@ -32,3 +32,4 @@ eval $(keychain --eval -q)
 # Alias to kill discord
 alias pkill--discord="pkill -f /usr/share/discord/Discord; pkill -f /usr/share/discord/Discord"
 
+export GPG_TTY=$(tty)
