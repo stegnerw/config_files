@@ -9,6 +9,8 @@ assign [class="(?i)alacritty"] $ws1
 assign [class="(?i)chromium"] $ws2
 # Workspace 3: Firefox
 assign [class="(?i)firefox"] $ws3
+# Workspace 4: Conferencing
+assign [class="(?i)microsoft teams - preview"] $ws4
 # Workspace 5: Papers
 assign [class="(?i)mendeley desktop"] $ws5
 assign [class="(?i)zotero"] $ws5
