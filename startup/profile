@@ -12,7 +12,7 @@
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+	    . "$HOME/.bashrc"
     fi
 fi
 
@@ -29,3 +29,7 @@ fi
 # Run keychain
 eval $(keychain --eval -q)
 
+# Alias to kill discord
+alias pkill--discord="pkill -f /usr/share/discord/Discord; pkill -f /usr/share/discord/Discord"
+
+export GPG_TTY=$(tty)

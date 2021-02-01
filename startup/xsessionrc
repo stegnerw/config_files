@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Configure monitors
+exec monitor_setup.sh &
 
 # Document Management
 exec dropbox start &
@@ -7,21 +9,25 @@ exec dropbox start &
 # Lock Screen
 exec xss-lock -- ~/.bin/transfer-sleep-lock-i3lock.sh &
 
-# Messaging
-exec discord &
-exec slack &
-
-# Password Management
-exec keepassxc &
+# Terminal
+exec alacritty &
 
 # Web browsing
-exec firefox &
+exec chromium &
 
 # Research
 exec mendeleydesktop &
 
-# Terminal
-exec alacritty &
+# Password Management
+exec keepassxc &
+
+# Music
+exec spotify &
+
+# Messaging
+exec discord &
+exec slack &
+exec signal-desktop &
 
 # Window compositor (for transparency)
 exec compton &

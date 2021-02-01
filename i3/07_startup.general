@@ -1,0 +1,42 @@
+################################################################################
+# STARTUP
+################################################################################
+#
+# Startup programs (Use this instead of .xsessionrc
+# Document syncing
+exec dropbox start
+# Lock screen
+exec xss-lock -- ~/.bin/transfer-sleep-lock-i3lock.sh
+# Terminal
+exec alacritty
+# Web browsing
+exec firefox
+exec chromium-browser
+# Conferencing
+exec teams
+# Research
+#exec mendeleydesktop
+exec zotero
+# Password management
+exec keepassxc
+exec yubioath-desktop
+# Music
+exec spotify
+# Messaging
+exec discord
+exec signal-desktop
+# Email
+#exec tutanota-desktop-linux.AppImage
+exec thunderbird
+exec protonmail-bridge
+# Window compositor (for transparency)
+exec compton
+# Screen red shifter
+exec redshift
+# Program for applying special rules for what is and isn't transparent
+exec devilspie -a
+# Set initial background
+exec change_background.sh
+# Start KDE Connect
+exec kdeconnect-indicator
+

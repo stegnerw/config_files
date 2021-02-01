@@ -10,21 +10,26 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
-" Colors
-Plugin 'dylanaraps/wal.vim'
-Plugin 'xdg/vim-darkluma'
-" Code Commenting Out
+" Code commenting out
 Plugin 'scrooloose/nerdcommenter'
-" Code Completion
+" Code completion
 Plugin 'ycm-core/YouCompleteMe'
-" Hex Editing
+" Hex editing
 Plugin 'fidian/hexmode'
-" Syntax Highlighting
+" Syntax highlighting
 Plugin 's3rvac/vim-syntax-retdecdsm'
 " Code linting
 Plugin 'tjdevries/overlength.vim'
 " LaTeX
 Plugin 'lervag/vimtex'
+" Markdown
+Plugin 'JamshedVesuna/vim-markdown-preview'
+" NerdFonts
+Plugin 'ryanoasis/vim-devicons'
+" Status bar
+Plugin 'itchyny/lightline.vim'
+" File browsing
+Plugin 'preservim/nerdtree'
 
 " All plugins must be added before the following line
 call vundle#end()
@@ -32,10 +37,8 @@ filetype plugin indent on
 " End Vundle
 
 " Variable Settings
-" Colors
-colorscheme wal
-" Set comments to a noticably different color
-set t_Co=256
+" Encoding
+set encoding=UTF-8
 
 " Line Settings
 set lbr
@@ -43,7 +46,7 @@ set number
 
 " Spell Check
 set spelllang=en
-set spell
+set nospell
 
 " Leader Settings
 let mapleader = ","
@@ -52,19 +55,18 @@ let mapleader = ","
 set backupdir=~/.vim_backup
 
 " Tab Width
-" On pressing tab, insert 2 spaces
-set expandtab
-" show existing tab with 2 spaces width
-set tabstop=2
-set softtabstop=2
-" when indenting with '>', use 2 spaces width
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 
 " Whitespace Visibility
 " Show trailing whitespace and eol
-set listchars=trail:~,eol:¬
+set listchars=trail:~,tab:\ \ 
 " Set visible
 set list
+
+" Markdown
+let vim_markdown_peview_toggle=2
 
 " Tex
 " Prevents vim from thinking a tex file is plaintex
@@ -74,4 +76,11 @@ let g:vimtex_view_method='zathura'
 " Order and usage requested by vim-tex
 filetype plugin indent on
 syntax on
+
+" Lightline
+set laststatus=2
+set noshowmode
+"let g:lightline = {
+      "\ 'colorscheme': 'medic_chalk',
+      "\ }
 

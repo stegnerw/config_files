@@ -3,18 +3,26 @@
 # Directory definitions
 BASE_DIR=$(realpath $(dirname "$0"))
 CONFIG_DIR=$HOME/.config/i3
+PARTS_DIR=$CONFIG_DIR/parts
+
+# Clear parts directory
+rm -rf $PARTS_DIR
 
 # Create necessary directories
-if [ -d $CONFIG_DIR ]; then
-  echo "WARNING: Directory already exists:"
-  echo $CONFIG_DIR
-else
-  mkdir $CONFIG_DIR
-fi
+for dir in $CONFIG_DIR $PARTS_DIR; do
+  if [ ! -d $dir ]; then
+    mkdir $dir
+  fi
+done
 
 # Create symlinks
-ln -sf $BASE_DIR/xsessionrc $HOME/.xsessionrc
-ln -sf $BASE_DIR/config $CONFIG_DIR/config
+for ext in .general .$(hostname); do
+  for part in $(ls $BASE_DIR | grep $ext | sort); do
+    src=$BASE_DIR/$part
+    dst=$PARTS_DIR/$(basename $part $ext)
+    ln -sf $src $dst
+  done
+done
 
 exit 0
 

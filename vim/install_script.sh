@@ -4,8 +4,9 @@
 BASE_DIR=$(realpath $(dirname "$0"))
 VUNDLE_DIR=$HOME/.vim/bundle/Vundle.vim
 
-# Create symlink
+# Create symlinks
 ln -sf $BASE_DIR/vimrc $HOME/.vimrc
+ln -sf $BASE_DIR/spell $HOME/.vim/spell
 
 # Install Vundle
 
