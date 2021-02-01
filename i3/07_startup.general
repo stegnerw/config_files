@@ -11,6 +11,7 @@ exec xss-lock -- ~/.bin/transfer-sleep-lock-i3lock.sh
 exec alacritty
 # Web browsing
 exec firefox
+exec chromium-browser
 # Conferencing
 exec teams
 # Research
