@@ -28,7 +28,6 @@ exec spotify &
 exec discord &
 exec slack &
 exec signal-desktop &
-exec tutanota-desktop-linux.AppImage
 
 # Window compositor (for transparency)
 exec compton &
