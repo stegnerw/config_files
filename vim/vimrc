@@ -50,19 +50,19 @@ set nospell
 
 " Leader Settings
 let mapleader = ","
+set showcmd
 
 " Backup Settings
 set backupdir=~/.vim_backup
 
 " Tab Width
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 
 " Whitespace Visibility
 " Show trailing whitespace and eol
-set listchars=trail:~,tab:\ \ 
-" Set visible
+set listchars=trail:·,tab:»·
 set list
 
 " Markdown
@@ -72,7 +72,6 @@ let vim_markdown_peview_toggle=2
 " Prevents vim from thinking a tex file is plaintex
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
-
 " Order and usage requested by vim-tex
 filetype plugin indent on
 syntax on
@@ -83,4 +82,15 @@ set noshowmode
 "let g:lightline = {
       "\ 'colorscheme': 'medic_chalk',
       "\ }
+
+" NERDTree
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+" Start NERDTree and put the cursor back in the other window
+autocmd VimEnter * NERDTree | wincmd p
+" Exit Vim if NERDTree is the only window left
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1
+	\ && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
