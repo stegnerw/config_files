@@ -4,32 +4,28 @@
 #
 # Workspace assignments
 # Workspace 1: Terminal
-assign [class="(?i)alacritty"] $ws1
-# Workspace 2: Chromium
-assign [class="(?i)chromium"] $ws2
-# Workspace 3: Firefox
-assign [class="(?i)firefox"] $ws3
-# Workspace 4: Conferencing
-assign [class="(?i)microsoft teams - preview"] $ws4
-# Workspace 5: Papers
-assign [class="(?i)mendeley desktop"] $ws5
-assign [class="(?i)zotero"] $ws5
+assign [class="(?i)^alacritty$"] $ws1
+# Workspace 2: Web browsing
+assign [class="(?i)^chromium-browser$"] $ws2
+assign [class="(?i)^firefox$"] $ws2
+# Workspace 3: Conferencing
+assign [class="(?i)^microsoft teams - preview$"] $ws3
+assign [class="(?i)^zoom$"] $ws3
+# Workspace 4: Papers
+assign [class="(?i)^zotero$"] $ws4
 # Workspace 11: Passwords/Security
-assign [class="(?i)keepassxc"] $ws11
-assign [class="(?i)Yubico Authenticator"] $ws11
+assign [class="(?i)^keepassxc$"] $ws11
+assign [class="(?i)^Yubico Authenticator$"] $ws11
 # Workspace 12: Music
 # For some reason the Spotify developers did not design their program properly
 # assign does not work because the hints are set after calling MapWindow
 # See: https://github.com/i3/i3/issues/2060
-for_window [instance="(?i)spotify"] move to workspace $ws12
-# Workspace 13: Discord
-assign [class="(?i)discord"] $ws13
-for_window [instance="(?i)discord.com__channels"] move to workspace $ws13
-# Workspace 14: Signal
-assign [class="(?i)signal"] $ws14
-# Workspace 15: Email
-assign [class="(?i)tutanota-desktop"] $ws15
-assign [class="(?i)thunderbird"] $ws15
+for_window [instance="(?i)^spotify$"] move to workspace $ws12
+# Workspace 13: Messaging
+assign [class="(?i)^discord$"] $ws13
+assign [class="(?i)^signal$"] $ws13
+# Workspace 14: Email
+assign [class="(?i)^thunderbird$"] $ws14
 #
 # Workspace default screens
 workspace $ws1 output $mon_prim
@@ -52,4 +48,7 @@ workspace $ws17 output $mon_sec
 workspace $ws18 output $mon_sec
 workspace $ws19 output $mon_sec
 workspace $ws20 output $mon_sec
+#
+# Default layout
+workspace_layout stacking
 
