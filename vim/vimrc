@@ -1,5 +1,6 @@
+set encoding=utf-8
 " Vundle
-set nocompatible " be iMproved, required for Vundle
+set nocompatible " required for Vundle
 filetype off     " required for Vundle
 
 " set the runtime path to include Vundle and initialize
@@ -14,11 +15,14 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 " Code completion
 Plugin 'ycm-core/YouCompleteMe'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'Vimjas/vim-python-pep8-indent'
 " Hex editing
 Plugin 'fidian/hexmode'
 " Syntax highlighting
 Plugin 's3rvac/vim-syntax-retdecdsm'
 " Code linting
+Plugin 'dense-analysis/ale'
 Plugin 'tjdevries/overlength.vim'
 " LaTeX
 Plugin 'lervag/vimtex'
@@ -30,15 +34,13 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'itchyny/lightline.vim'
 " File browsing
 Plugin 'preservim/nerdtree'
+" Git
+Plugin 'airblade/vim-gitgutter'
 
 " All plugins must be added before the following line
 call vundle#end()
 filetype plugin indent on
 " End Vundle
-
-" Variable Settings
-" Encoding
-set encoding=UTF-8
 
 " Line Settings
 set lbr
@@ -66,12 +68,12 @@ set listchars=trail:·,tab:»·
 set list
 
 " Markdown
-let vim_markdown_peview_toggle=2
+let vim_markdown_peview_toggle = 2
 
 " Tex
 " Prevents vim from thinking a tex file is plaintex
-let g:tex_flavor='latex'
-let g:vimtex_view_method='zathura'
+let g:tex_flavor = 'latex'
+let g:vimtex_view_method = 'zathura'
 " Order and usage requested by vim-tex
 filetype plugin indent on
 syntax on
@@ -79,9 +81,9 @@ syntax on
 " Lightline
 set laststatus=2
 set noshowmode
-"let g:lightline = {
-      "\ 'colorscheme': 'medic_chalk',
-      "\ }
+let g:lightline = {
+	\ 'colorscheme': 'default',
+	\ }
 
 " NERDTree
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -92,5 +94,14 @@ nnoremap <C-f> :NERDTreeFind<CR>
 autocmd VimEnter * NERDTree | wincmd p
 " Exit Vim if NERDTree is the only window left
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1
-	\ && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+    \ && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Gitgutter
+set updatetime=100 " Update every 100 ms(also controls swap file)
+let b:ale_linters = {
+			\	'python': ['pylint'],
+			\}
+let b:ale_fixers = {
+			\	'python': ['yapf']
+			\}
 
