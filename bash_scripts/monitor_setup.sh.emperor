@@ -8,7 +8,8 @@ xrandr --output DP-0 --primary --mode 2560x1440 --rate 165.00
 
 # Set DP-2 right of DP-0
 xrandr --output DP-2 --right-of DP-0 --mode 2560x1440 --rate 165.00
+#xrandr --output HDMI-0 --left-of DP-0 --mode 1920x1080 --rate 60.00
+
 
 # Restart i3
 i3-msg restart
-
