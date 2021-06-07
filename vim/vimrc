@@ -15,7 +15,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 " Code completion
 Plugin 'ycm-core/YouCompleteMe'
-Plugin 'jiangmiao/auto-pairs'
 Plugin 'Vimjas/vim-python-pep8-indent'
 " Hex editing
 Plugin 'fidian/hexmode'
@@ -102,6 +101,7 @@ let b:ale_linters = {
 			\	'python': ['pylint'],
 			\}
 let b:ale_fixers = {
-			\	'python': ['yapf']
+			\	'*': ['remove_trailing_lines', 'trim_whitespace'],
+			\	'python': ['yapf'],
 			\}
-
+let g:ale_fix_on_save = 1
