@@ -12,10 +12,7 @@ exec alacritty
 # Web browsing
 exec firefox
 exec chromium-browser
-# Conferencing
-exec teams
 # Research
-#exec mendeleydesktop
 exec zotero
 # Password management
 exec keepassxc
@@ -26,7 +23,6 @@ exec spotify
 exec discord
 exec signal-desktop
 # Email
-#exec tutanota-desktop-linux.AppImage
 exec thunderbird
 exec protonmail-bridge
 # Window compositor (for transparency)
