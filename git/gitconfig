@@ -1,7 +1,7 @@
 [user]
   name = stegnerw
-	email = wayne.stegner@protonmail.com
-	signingkey = 83972C51BBDE2DFF
+  email = wayne.stegner@protonmail.com
+  signingkey = 83972C51BBDE2DFF
 
 [push]
   default = simple
@@ -23,9 +23,9 @@
   ; Pretty log of commits and branches
   lola = log --graph --decorate --pretty=format:\"%C(yellow)%h %Cred%cr %Cblue(%an)%C(white)%d%Creset %s\" --abbrev-commit --all
   ; List all bash aliases
-	aliases = config --get-regexp '^alias\\.'
+  aliases = config --get-regexp '^alias\\.'
   ; Create new branch and push to remote
   newbr = !git checkout -b $1 && git push --set-upstream origin $1 && :
 
 [remote "origin"]
-	prune = true
+  prune = true
