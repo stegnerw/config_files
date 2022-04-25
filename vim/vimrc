@@ -22,6 +22,8 @@ Plugin 'fidian/hexmode'
 Plugin 's3rvac/vim-syntax-retdecdsm'
 " Code linting
 Plugin 'dense-analysis/ale'
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'rhysd/vim-lsp-ale'
 Plugin 'tjdevries/overlength.vim'
 " LaTeX
 Plugin 'lervag/vimtex'
@@ -35,6 +37,8 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'preservim/nerdtree'
 " Git
 Plugin 'airblade/vim-gitgutter'
+" PlatformIO
+Plugin 'normen/vim-pio'
 
 " All plugins must be added before the following line
 call vundle#end()
@@ -92,8 +96,8 @@ syntax on
 set laststatus=2
 set noshowmode
 let g:lightline = {
-	\ 'colorscheme': 'default',
-	\ }
+  \ 'colorscheme': 'default',
+  \ }
 
 " NERDTree
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -109,10 +113,10 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1
 " Gitgutter
 set updatetime=100 " Update every 100 ms(also controls swap file)
 let b:ale_linters = {
-			\	'python': ['pylint'],
-			\}
+      \ 'python': ['pylint'],
+      \}
 let b:ale_fixers = {
-			\	'*': ['remove_trailing_lines', 'trim_whitespace'],
-			\	'python': ['yapf'],
-			\}
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'python': ['yapf'],
+      \}
 let g:ale_fix_on_save = 1
