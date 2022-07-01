@@ -31,7 +31,7 @@ Plug 'scrooloose/nerdcommenter'
 " Markdown
 "Plug 'JamshedVesuna/vim-markdown-preview'
 " NerdFonts
-Plug 'ryanoasis/vim-devicons'
+Plug 'lambdalisue/nerdfont.vim'
 " Status bar
 Plug 'itchyny/lightline.vim'
 "Plug 'josa42/vim-lightline-coc'
@@ -98,7 +98,7 @@ set spell
 
 set showcmd
 " Backup settings
-set backupdir=~/.vim_backup
+set backupdir=$HOME/.vim_backup
 set undofile
 
 " Search settings
@@ -158,8 +158,6 @@ nnoremap <leader>nn :NERDTreeFocus<CR>
 nnoremap <leader>ns :NERDTree<CR>
 nnoremap <leader>nt :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
-" Start NERDTree and put the cursor back in the other window
-autocmd VimEnter * NERDTree | wincmd p
 " Exit Vim if NERDTree is the only window left
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1
     \ && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
