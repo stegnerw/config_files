@@ -32,3 +32,6 @@ eval $(keychain --eval -q)
 # Alias to kill discord
 alias pkill--discord="pkill -f /usr/share/discord/Discord; pkill -f /usr/share/discord/Discord"
 
+# Set our config directory
+export XDG_CONFIG_HOME="$HOME/.config"
+
