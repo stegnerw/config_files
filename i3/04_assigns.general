@@ -50,5 +50,5 @@ workspace $ws19 output $mon_sec
 workspace $ws20 output $mon_sec
 #
 # Default layout
-workspace_layout stacking
+workspace_layout default
 
