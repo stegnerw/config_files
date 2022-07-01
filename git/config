@@ -1,14 +1,14 @@
-[user]
-  name = stegnerw
-  email = wayne.stegner@protonmail.com
-  signingkey = 9B7BD776A4F950F2
+[include]
+  path = personal_user.gitconfig
 
 [push]
-  default = simple
+  default = upstream
 
 [core]
-  excludesfile = ~/.gitignore
   editor = vim
+
+[diff]
+  tool = vimdiff
 
 [alias]
   ; Shorthand

@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # Directory definitions
-BASE_DIR=$(realpath $(dirname "$0"))
-CONFIG_DIR=$XDG_CONFIG_HOME/git
-mkdir -p $CONFIG_DIR
+base_dir=$(realpath $(dirname "$0"))
+config_dir=$XDG_CONFIG_HOME/git
+mkdir -p $config_dir
 
 # Create symlinks
-ln -sf $BASE_DIR/config $CONFIG_DIR/config
-ln -sf $BASE_DIR/ignore $CONFIG_DIR/ignore
+ln -sf $base_dir/config $config_dir/config
+ln -sf $base_dir/ignore $config_dir/ignore
+ln -sf $base_dir/$(hostname).personal_user.gitconfig \
+  $config_dir/personal_user.gitconfig
 
 exit 0
 
