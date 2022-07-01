@@ -16,16 +16,8 @@ if [ -z $(which git) ]; then
   exit 1
 fi
 
-# Install Vundle
-if [ -d $VUNDLE_DIR ]; then
-  echo "Vundle already found."
-else
-  echo "Vundle not found. Cloning from git..."
-  git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE_DIR
-fi
-
 # Install plugins
-vim +PluginInstall +qall
+vim +PlugUpdate +PlugUpgrade
 
 exit 0
 
