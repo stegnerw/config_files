@@ -5,14 +5,10 @@
 # Workspace assignments
 # Workspace 1: Terminal
 assign [class="(?i)^alacritty$"] $ws1
+assign [class="(?i)^kitty$"] $ws1
 # Workspace 2: Web browsing
 assign [class="(?i)^chromium-browser$"] $ws2
 assign [class="(?i)^firefox$"] $ws2
-# Workspace 3: Conferencing
-assign [class="(?i)^microsoft teams - preview$"] $ws3
-assign [class="(?i)^zoom$"] $ws3
-# Workspace 4: Papers
-assign [class="(?i)^zotero$"] $ws4
 # Workspace 11: Passwords/Security
 assign [class="(?i)^keepassxc$"] $ws11
 assign [class="(?i)^Yubico Authenticator$"] $ws11
