@@ -1,6 +1,9 @@
 [include]
   path = personal_user.gitconfig
 
+[init]
+  defaultBranch = main
+
 [push]
   default = upstream
 
