@@ -53,12 +53,12 @@ if [ ! -f $wallpaper_file ]; then
 fi
 
 # Set the background
-if [ -z $n ]; then
+if [ $n -eq 0 ]; then
   feh --bg-max $wallpaper_file
 fi
 
 # Print file to stdout
-if [ -n $o ]; then
+if [ $o -eq 1 ]; then
   echo $wallpaper_file
 fi
 
