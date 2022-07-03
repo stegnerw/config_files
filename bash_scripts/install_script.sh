@@ -9,16 +9,15 @@ if [ ! -d $BIN_DIR ]; then
   mkdir $BIN_DIR
 fi
 
-# Create symlinks
-ln -sf $BASE_DIR/pixelated_screenshot.sh $BIN_DIR/pixelated_screenshot.sh
-ln -sf $BASE_DIR/transfer-sleep-lock-i3lock.sh $BIN_DIR/transfer-sleep-lock-i3lock.sh
-ln -sf $BASE_DIR/change_background.sh $BIN_DIR/change_background.sh
-ln -sf $BASE_DIR/devilspie_transparency_compton_trans.sh $BIN_DIR/devilspie_transparency_compton_trans.sh
-ln -sf $BASE_DIR/monitor_setup.sh.emperor $BIN_DIR/monitor_setup.sh
-ln -sf $BASE_DIR/i3_config_merge.sh $BIN_DIR/i3_config_merge.sh
-
-ln -sf $BASE_DIR/notif_pause.sh $BIN_DIR/notif_pause.sh
-ln -sf $BASE_DIR/notif_resume.sh $BIN_DIR/notif_resume.sh
+# Create symlinks and set execute
+for script in $(ls $BASE_DIR); do
+  if [ $script == "install_script.sh" ]; then
+    continue
+  fi
+  echo $script
+  chmod 0700 $BASE_DIR/$script
+  ln -sf $BASE_DIR/$script $BIN_DIR/$script
+done
 
 exit 0
 
