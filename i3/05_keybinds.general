@@ -105,7 +105,7 @@ bindsym $mod+shift+t exec --no-startup-id ~/.bin/change_background.sh
 #bindsym XF86AudioMute exec --no-startup-id pulsemixer --toggle-mute
 #bindsym XF86AudioLowerVolume exec --no-startup-id pulsemixer --change-volume -2
 #bindsym XF86AudioRaiseVolume exec --no-startup-id pulsemixer --change-volume +2
-#bindsym XF86Calculator exec --no-startup-id <calculator program>
+bindsym XF86Calculator exec --no-startup-id qalculate-gtk
 # Print screen
 bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui
 # Set primary clipboard to contents of clipboard
