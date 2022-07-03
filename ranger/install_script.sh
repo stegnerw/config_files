@@ -11,7 +11,7 @@ done
 
 # Create symlinks
 for config in $(ls $BASE_DIR); do
-  ln -sf $BASE_DIR/$config $CONFIG_DIR/$config
+  ln -sfT $BASE_DIR/$config $CONFIG_DIR/$config
 done
 
 exit 0
