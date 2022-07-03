@@ -40,7 +40,8 @@ set $ws19   "19:"
 set $ws20   "20:"
 
 # Shutdown, Reboot, & Lock Screen
-set $Locker loginctl lock-session
+# TODO: Add a background image
+set $Locker i3lock --ignore-empty-password --show-failed-attempts
 set $mode_system System (l) LOCK, (e) LOGOUT, (s) SUSPEND, (h) HIBERNATE, \
   (r) REBOOT, (Shift+s) SHUTDOWN
 mode "$mode_system" {
