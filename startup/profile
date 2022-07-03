@@ -35,3 +35,9 @@ alias pkill--discord="pkill -f /usr/share/discord/Discord; pkill -f /usr/share/d
 # Set our config directory
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# Set default text editor
+export EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim
+
+# Add separator for ranger devicons display
+export RANGER_DEVICONS_SEPARATOR="  "
