@@ -41,7 +41,7 @@ set $ws20   "20:"
 
 # Shutdown, Reboot, & Lock Screen
 # TODO: Add a background image
-set $Locker i3lock --image=$(change_background.sh -no) --ignore-empty-password --show-failed-attempts
+set $Locker i3lock -efi $(make_lockscreen.sh)
 set $mode_system System (l) LOCK, (e) LOGOUT, (s) SUSPEND, \
   (r) REBOOT, (Shift+s) SHUTDOWN
 mode "$mode_system" {

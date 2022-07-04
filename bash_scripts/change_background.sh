@@ -16,7 +16,7 @@ function print_usage() {
 }
 
 function random_file() {
-  find $1 -type f | sort -R | tail -n 1
+  find $1 -type f -iname "*.png" | sort -R | tail -n 1
 }
 
 while getopts "d:no" OPTION; do

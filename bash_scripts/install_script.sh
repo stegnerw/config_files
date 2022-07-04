@@ -14,7 +14,6 @@ for script in $(ls $BASE_DIR); do
   if [ $script == "install_script.sh" ]; then
     continue
   fi
-  echo $script
   chmod 0700 $BASE_DIR/$script
   ln -sf $BASE_DIR/$script $BIN_DIR/$script
 done
