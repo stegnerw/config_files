@@ -1,17 +1,19 @@
+#!/usr/bin/env bash
+
 ###############################################################################
 # Background programs
 ###############################################################################
 
-# Configure monitors and set initial wallpaper
+# Monitor/Wallpaper setup
 monitor_setup.sh &
 change_wallpaper.sh &
-# Document syncing
-dropbox start &
-# Screen red shifter w/location agent
+# Screen red shifter+location agent
 redshift &
-/usr/lib/geoclue-2.0/demos/agent
+/usr/lib/geoclue-2.0/demos/agent &
 # Screenshot util
 flameshot &
+# Document syncing
+dropbox start &
 
 ###############################################################################
 # User programs
@@ -19,6 +21,7 @@ flameshot &
 
 # Password management
 keepassxc &
+yubioath-desktop &
 # Music
 spotify &
 spotify-launcher &
