@@ -4,7 +4,7 @@
 
 # Configure monitors and set initial wallpaper
 monitor_setup.sh &
-change_background.sh &
+change_wallpaper.sh &
 # Document syncing
 dropbox start &
 # Screen red shifter w/location agent

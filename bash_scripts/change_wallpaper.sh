@@ -1,34 +1,24 @@
 #!/usr/bin/env bash
 
-default_wallpaper_dir=$HOME/Dropbox/Wallpapers
+default_wallpaper_dir=$HOME/Pictures/wallpapers
 
 # Default options
 d=$default_wallpaper_dir
-n=0
-o=0
 
 function print_usage() {
   echo "$0: $(basename $0) [-d wallpaper_dir] [-n] [-o]"
   echo "-d <wallpaper_dir>  Directory with wallpaper images."
   echo "                    Defaults to $default_wallpaper_dir."
-  echo "-n                  No set wallpaper."
-  echo "-o                  Output the image path to stdout."
 }
 
 function random_file() {
-  find $1 -type f -iname "*.png" | sort -R | tail -n 1
+  find -L $1 -type f -iname "*.png" | sort -R | tail -n 1
 }
 
 while getopts "d:no" OPTION; do
   case $OPTION in
     d)
       d=$OPTARG
-      ;;
-    n)
-      n=1
-      ;;
-    o)
-      o=1
       ;;
     ?)
       print_usage
@@ -53,12 +43,4 @@ if [ ! -f $wallpaper_file ]; then
 fi
 
 # Set the background
-if [ $n -eq 0 ]; then
-  feh --bg-max $wallpaper_file
-fi
-
-# Print file to stdout
-if [ $o -eq 1 ]; then
-  echo $wallpaper_file
-fi
-
+feh --bg-max $wallpaper_file
