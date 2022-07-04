@@ -12,6 +12,7 @@ fi
 # Create symlinks
 ln -sf $BASE_DIR/bashrc $HOME/.bashrc
 ln -sf $BASE_DIR/profile $HOME/.profile
+ln -sf $BASE_DIR/xinitrc $HOME/.xinitrc
 
 ln -sf $BASE_DIR/bash_aliases/general $ALIAS_DIR/general
 
