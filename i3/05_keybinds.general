@@ -106,9 +106,9 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1%
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +1%
 bindsym XF86Calculator exec --no-startup-id qalculate-gtk
-# Print screen
+# Screenshot
 bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui
-# Set primary clipboard to contents of clipboard
-bindsym $mod+c exec --no-startup-id xclip -o -sel clipboard | xclip -i -sel primary
+# Toggle dunst notifications
+bindsym $mod+n exec --no-startup-id dunstctl set-paused toggle && dunst_status.sh
 
 
