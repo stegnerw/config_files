@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Directory definitions
 CONFIG_DIR=$HOME/.config/i3
