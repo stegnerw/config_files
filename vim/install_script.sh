@@ -17,7 +17,6 @@ if [ -z $(which git) ]; then
 fi
 
 # Install plugins
-vim +PlugUpdate +PlugUpgrade
+vim +PlugUpdate +PlugUpgrade +PlugClean
 
 exit 0
-
