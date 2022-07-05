@@ -20,14 +20,13 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Code commenting out
 Plug 'scrooloose/nerdcommenter'
 " Code completion
-"Plug 'ycm-core/YouCompleteMe'
 "Plug 'Vimjas/vim-python-pep8-indent'
-" Code linting
-"Plug 'dense-analysis/ale'
-"Plug 'prabirshrestha/vim-lsp'
-"Plug 'rhysd/vim-lsp-ale'
+" LSP, autocomplete, and linting
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " LaTeX
-"Plug 'lervag/vimtex'
+Plug 'lervag/vimtex'
 " Markdown
 "Plug 'JamshedVesuna/vim-markdown-preview'
 " NerdFonts
@@ -38,9 +37,9 @@ Plug 'itchyny/lightline.vim'
 " File browsing
 Plug 'preservim/nerdtree'
 " Git
-"Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 " PlatformIO
-"Plug 'normen/vim-pio'
+Plug 'normen/vim-pio'
 " Multiple cursors
 "Plug 'mg979/vim-visual-multi'
 call plug#end()
@@ -164,22 +163,14 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1
 
 " Gitgutter
 set updatetime=100 " Update every 100 ms(also controls swap file)
-let b:ale_linters = {
-      \ 'python': ['pylint'],
-      \}
-let b:ale_fixers = {
-      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \ 'python': ['yapf'],
-      \}
-let g:ale_fix_on_save = 1
 
-" Some stuff from https://github.com/normen/vim-pio
+" Enable CCLS and register with vim-lsp
 if executable('ccls')
   " disable clangd
   let g:lsp_settings = {
     \  'clangd': {'disabled': v:true}
     \}
-  au User lsp_setup call lsp#register_server({
+  autocmd User lsp_setup call lsp#register_server({
     \ 'name': 'ccls',
     \ 'cmd': {server_info->['ccls']},
     \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), '.ccls'))},
@@ -196,4 +187,3 @@ iabbrev pm@@ wayne.stegner@protonmail.com
 iabbrev ccopy Copyright 2022 Wayne Stegner, all rights reserved.
 " Signature
 iabbrev ssig --<cr>Wayne Stegner<cr>wayne.stegner@protonmail.com
-
