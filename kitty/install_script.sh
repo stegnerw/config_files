@@ -10,7 +10,10 @@ for dir in $CONFIG_DIR; do
 done
 
 # Create symlinks
-ln -sf $BASE_DIR/kitty.conf $CONFIG_DIR/kitty.conf
+for config in $(ls $BASE_DIR/*.conf); do
+  config_n=$(basename $config)
+  ln -sf $BASE_DIR/$config_n $CONFIG_DIR/$config_n
+done
 
 exit 0
 
