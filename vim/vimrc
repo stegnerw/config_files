@@ -129,6 +129,7 @@ set foldmethod=syntax
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
+set foldcolumn=1
 
 " Whitespace Visibility
 " Show trailing whitespace and eol
