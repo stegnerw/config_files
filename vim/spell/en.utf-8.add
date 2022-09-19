@@ -137,3 +137,10 @@ configs
 conf
 usr
 pts
+IMUs
+IMU
+MCU
+Westside
+BoM
+Arduino
+usec
