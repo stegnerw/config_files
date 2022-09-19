@@ -52,8 +52,8 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 
 " Misc/unsorted
-set textwidth=79
-set colorcolumn=80
+set textwidth=80
+set colorcolumn=81
 set shiftround
 set scrolloff=5
 nnoremap H 0
