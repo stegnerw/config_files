@@ -21,7 +21,6 @@ dropbox start &
 
 # Password management
 keepassxc &
-yubioath-desktop &
 # Music
 spotify &
 spotify-launcher &
