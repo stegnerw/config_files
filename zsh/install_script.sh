@@ -18,12 +18,12 @@ ln -sf $base_dir/zshrc $HOME/.zshrc
 ln -sf $base_dir/zprofile $HOME/.zprofile
 
 echo "Installing plugins to ${ZSH}/${rel_plugin_dir}"
-for plugin in $(ls -d $base_dir/${rel_plugin_dir}/*); do
+for plugin in $(ls -d $base_dir/plugins/*); do
   echo "Installing plugin ${plugin}"
   ln -sf ${plugin} ${ZSH}/${rel_plugin_dir}
 done
 
-for theme in $(ls -d $base_dir/${rel_theme_dir}/*.zsh-theme); do
+for theme in $(ls -d $base_dir/themes/*.zsh-theme); do
   echo "Installing theme ${theme}"
   ln -sf ${theme} ${ZSH}/${rel_theme_dir}
 done
