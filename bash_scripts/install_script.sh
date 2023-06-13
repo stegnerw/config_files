@@ -10,12 +10,19 @@ if [ ! -d $BIN_DIR ]; then
 fi
 
 # Create symlinks and set execute
-for script in $(ls $BASE_DIR); do
-  if [ $script == "install_script.sh" ]; then
+for script in $(ls $BASE_DIR/*.sh); do
+  script_name=$(basename $script)
+  if [ $script_name == "install_script.sh" ]; then
     continue
   fi
-  chmod 0755 $BASE_DIR/$script
-  ln -sf $BASE_DIR/$script $BIN_DIR/$script
+  chmod 0755 $script
+  ln -sf $script $BIN_DIR/$script_name
+done
+
+for script in $(ls $BASE_DIR/*.$(hostname)); do
+  script_name=$(basename $script .$(hostname))
+  chmod 0755 $script
+  ln -sf $script $BIN_DIR/$script_name
 done
 
 exit 0
