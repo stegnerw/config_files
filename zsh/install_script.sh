@@ -6,6 +6,7 @@ if [ -z $ZSH ]; then
   ZSH=$HOME/.oh-my-zsh
 fi
 rel_plugin_dir=custom/plugins
+rel_theme_dir=custom/themes
 
 # Create necessary directories
 for dir in $ZSH; do
@@ -20,6 +21,11 @@ echo "Installing plugins to ${ZSH}/${rel_plugin_dir}"
 for plugin in $(ls -d $base_dir/${rel_plugin_dir}/*); do
   echo "Installing plugin ${plugin}"
   ln -sf ${plugin} ${ZSH}/${rel_plugin_dir}
+done
+
+for theme in $(ls -d $base_dir/${rel_theme_dir}/*.zsh-theme); do
+  echo "Installing theme ${theme}"
+  ln -sf ${theme} ${ZSH}/${rel_theme_dir}
 done
 
 exit 0
