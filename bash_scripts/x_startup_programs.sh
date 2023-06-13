@@ -14,6 +14,8 @@ redshift &
 flameshot &
 # Document syncing
 dropbox start &
+# Locker
+light-locker &
 
 ###############################################################################
 # User programs
