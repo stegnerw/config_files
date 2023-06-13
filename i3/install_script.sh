@@ -24,5 +24,14 @@ for ext in .general .$(hostname); do
   done
 done
 
+conf_merge=$(realpath "${BASE_DIR}/../bash_scripts/i3_config_merge.sh")
+printf "Attempting to call i3_config_merge.sh:\n  \"${conf_merge}\"\n"
+if [[ -x $conf_merge ]]; then
+  printf "Merging...\n"
+  $conf_merge
+else
+  printf "Couldn't find i3_config_merge.sh. Please run manually!\n"
+fi
+
 exit 0
 
