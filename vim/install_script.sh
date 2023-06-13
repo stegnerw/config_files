@@ -2,13 +2,13 @@
 
 # Directory definitions
 BASE_DIR=$(realpath $(dirname "$0"))
-VUNDLE_DIR=$HOME/.vim/bundle/Vundle.vim
+VIM_DIR=$HOME/.vim
+VIM_BACKUP_DIR=$VIM_DIR/backup
+mkdir -p $VIM_BACKUP_DIR
 
 # Create symlinks
 ln -sf $BASE_DIR/vimrc $HOME/.vimrc
-ln -sf $BASE_DIR/spell $HOME/.vim/
-
-# Install Vundle
+ln -sf $BASE_DIR/spell $VIM_DIR
 
 # Check for git
 if [ -z $(which git) ]; then
