@@ -11,6 +11,10 @@ function print_usage() {
   echo "                    Defaults to $default_wallpaper_dir."
 }
 
+function random_file() {
+  find -L $1 -type f -iname "*.png" | sort -R | tail -n 1
+}
+
 while getopts "d:no" OPTION; do
   case $OPTION in
     d)
@@ -29,5 +33,14 @@ if [ ! -d $d ]; then
   exit 1
 fi
 
+# Grab a random file and make sure it exists
+wallpaper_file=$(random_file $d)
+if [ ! -f $wallpaper_file ]; then
+  echo "No wallpapers found in: $d."
+  echo "random_file returned: $wallpaper_file."
+  print_usage
+  exit 1
+fi
+
 # Set the background
-feh --bg-max --randomize $d/*
+feh --bg-max $wallpaper_file
