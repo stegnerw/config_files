@@ -1,24 +1,14 @@
 [include]
   path = personal_user.gitconfig
 
-[init]
-  defaultBranch = main
-
-[push]
-  default = upstream
-
-[core]
-  editor = vim
-
-[diff]
-  tool = vimdiff
-
 [alias]
   ; Shorthand
   co = checkout
-  ci = commit -S
-  st = status
+  ci = commit
+  st = status --short
   br = branch
+  df = diff
+  dfs = diff --staged
   ; Unstage currently added changes to a file
   unstage = reset HEAD --
   ; View last commit info
@@ -30,5 +20,47 @@
   ; Create new branch and push to remote
   newbr = !git checkout -b $1 && git push --set-upstream origin $1 && :
 
-[remote "origin"]
+[commit]
+  gpgSign = true
+  verbose = true
+
+[core]
+  editor = vim
+
+[diff]
+  tool = vimdiff
+
+[fetch]
+  output = compact
+  ; 0 selects a "reasonable default" number of parallel jobs
+  parallel = 0
   prune = true
+  recurseSubmodules = true
+
+[init]
+  defaultBranch = main
+
+[log]
+  diffMerges = first-parent
+
+[merge]
+  ff = false
+  tool = vimdiff
+
+[pull]
+  ff = only
+
+[push]
+  default = upstream
+  gpgSign = if-asked
+
+[stash]
+  showPatch = true
+
+[submodule]
+  ; 0 selects a "reasonable default"
+  fetchJobs = 0
+  recurse = true
+
+[web]
+  browser = firefox
