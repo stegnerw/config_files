@@ -14,7 +14,8 @@
   ; View last commit info
   last = log -l HEAD
   ; Pretty log of commits and branches
-  lola = log --graph --decorate --pretty=format:\"%C(yellow)%h %Cred%cr %Cblue(%an)%C(white)%d%Creset %s\" --abbrev-commit --all
+  lola = log --graph --decorate --pretty=format:\"%C(yellow)%h %C(red)%cI \
+%C(blue)(%an)%C(yellow)[%G?]%Creset %s %C(green)%d\" --abbrev-commit --all
   ; List all bash aliases
   aliases = config --get-regexp '^alias\\.'
   ; Create new branch and push to remote
