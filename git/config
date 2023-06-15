@@ -5,7 +5,7 @@
   ; Shorthand
   co = checkout
   ci = commit
-  st = status --short --branch
+  st = status
   br = branch
   df = diff
   dfs = diff --staged
@@ -57,6 +57,11 @@
 
 [stash]
   showPatch = true
+
+[status]
+  short = true
+  branch = true
+  showStash = true
 
 [submodule]
   ; 0 selects a "reasonable default"
