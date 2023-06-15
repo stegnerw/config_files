@@ -1,12 +1,1 @@
-# Dracarys VM Syncing (research VMs only)
-
-alias pushVMs_research="rsync -uavzP -e ssh ~/VMs/Research/ Dracarys:~/VMs/"
-alias pullVMs_research="rsync -uavzP -e ssh Dracarys:~/VMs/ ~/VMs/Research/"
-
-# Emperor VM Syncing
-
-alias pushVMs_Emperor_l="rsync -uavzP -e ssh ~/VMs/ Emperor_l:~/VMs/"
-alias pullVMs_Emperor_l="rsync -uavzP -e ssh Emperor_l:~/VMs/ ~/VMs/"
-alias pushVMs_Emperor="rsync -uavzP -e ssh ~/VMs/ Emperor:~/VMs/"
-alias pullVMs_Emperor="rsync -uavzP -e ssh Emperor:~/VMs/ ~/VMs/"
-
+# None

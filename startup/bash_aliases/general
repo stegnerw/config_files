@@ -1,2 +1,1 @@
-# Kill discord
-alias pkill--discord="pkill -f /usr/share/discord/Discord; pkill -f /usr/share/discord/Discord"
+# None
