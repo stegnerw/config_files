@@ -5,7 +5,7 @@
   ; Shorthand
   co = checkout
   ci = commit
-  st = status --short
+  st = status --short --branch
   br = branch
   df = diff
   dfs = diff --staged
