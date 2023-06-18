@@ -41,7 +41,7 @@ zstyle ':omz:update' frequency 1
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
@@ -129,3 +129,5 @@ VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 INSERT_MODE_INDICATOR="%F{yellow}+%f"
 # Add indicator to RPROMPT
 RPROMPT="\$(vi_mode_prompt_info)$RPROMPT"
+
+alias :q="printf 'vim moment'; sleep 1; exit"
