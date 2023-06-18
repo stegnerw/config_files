@@ -29,12 +29,15 @@ fi
 # Run keychain
 eval $(keychain --eval -q)
 
-# Set our config directory
+# Set XDG directories
+export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# Set default text editor
+# Set preferred programs
+# Text editors
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
+export TERMINAL=/usr/bin/kitty  # Used by i3
 
 # Add separator for ranger devicons display
 export RANGER_DEVICONS_SEPARATOR="  "
