@@ -1,14 +1,8 @@
 ###############################################################################
-# ASSIGNS
+# WINDOW CONFIGS
 ###############################################################################
 #
 # Workspace assignments
-# Workspace 1: Terminal
-assign [class="(?i)^alacritty$"] $ws1
-assign [class="(?i)^kitty$"] $ws1
-# Workspace 2: Web browsing
-assign [class="(?i)^chromium-browser$"] $ws2
-assign [class="(?i)^firefox$"] $ws2
 # Workspace 11: Passwords/Security
 assign [class="(?i)^keepassxc$"] $ws11
 assign [class="(?i)^Yubico Authenticator$"] $ws11
@@ -22,6 +16,13 @@ assign [class="(?i)^discord$"] $ws13
 assign [class="(?i)^signal$"] $ws13
 # Workspace 14: Email
 assign [class="(?i)^thunderbird$"] $ws14
+#
+# Window Configurations
+for_window [all] title_window_icon on
+for_window [class="(?i)^steam"] floating enable
+for_window [class="(?i)^steam" title="(?i)^steam"] floating disable
+for_window [class="(?i)^qalculate-gtk"] floating enable
+for_window [class="(?i)^thunar"] floating enable
 #
 # Workspace default screens
 workspace $ws1 output $mon_prim
