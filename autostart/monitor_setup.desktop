@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=monitor_setup.sh
+Comment=Script to set up monitors
+Exec=monitor_setup.sh
+Terminal=false

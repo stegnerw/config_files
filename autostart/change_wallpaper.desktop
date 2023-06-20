@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=change_wallpaper.sh
+Comment=Script to change wallpaper
+Exec=change_wallpaper.sh
+Terminal=false
