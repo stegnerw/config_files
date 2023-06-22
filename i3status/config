@@ -72,7 +72,7 @@ cpu_usage {
 
 load {
   format = " 󰔟 %1min/1m"
-  max_threshold = "5"
+  max_threshold = "10"
   format_above_threshold = " 󰔟 %1min/1m;%5min/5m;%15min/15m"
 }
 
