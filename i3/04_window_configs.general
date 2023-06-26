@@ -23,7 +23,7 @@ for_window [all] title_window_icon on
 for_window [class="(?i)^proton mail bridge"] floating enable
 for_window [class="(?i)^qalculate-gtk"] floating enable
 for_window [class="(?i)^steam"] floating enable
-for_window [class="(?i)^steam" title="(?i)^steam"] floating disable
+for_window [class="(?i)^steam" title="(?i)^steam$"] floating disable
 for_window [class="(?i)^thunar"] floating enable
 #
 # Workspace default screens
