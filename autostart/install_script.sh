@@ -16,8 +16,8 @@ ln -sf /usr/share/applications/signal-desktop.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/spotify-launcher.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/thunderbird.desktop "$AUTOSTART_DIR/"
 
-for dtfile in $(ls *.desktop); do
-  ln -sf "$BASE_DIR/$dtfile" "$AUTOSTART_DIR/"
+for dtfile in $(ls $BASE_DIR/*.desktop); do
+  ln -sf $dtfile "$AUTOSTART_DIR/"
 done
 
 exit 0
