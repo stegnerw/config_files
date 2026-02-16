@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Simple Scan
+Comment=Scan Documents
+Exec=simple-scan
+Terminal=false
+Icon=scanner
+Categories=Graphics;Scanning;
