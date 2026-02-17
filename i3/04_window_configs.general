@@ -25,6 +25,7 @@ for_window [class="(?i)^qalculate-gtk"] floating enable
 for_window [class="(?i)^steam"] floating enable
 for_window [class="(?i)^steam" title="(?i)^steam$"] floating disable
 for_window [class="(?i)^thunar"] floating enable
+for_window [class="^feh"] floating enable
 #
 # Workspace default screens
 workspace $ws1 output $mon_prim
