@@ -1,6 +1,6 @@
 #!/bin/bash
 # docscan [title] [profile] [options]
-# profile: "practice" (1200 dpi PNG), "archive" (2400 dpi TIFF+PNG)
+# profile: "practice" (600 dpi PNG), "archive" (2400 dpi TIFF+PNG)
 
 # Clean up tmp files on exit
 tmp_files=()
@@ -21,8 +21,8 @@ show_usage() {
   echo "Options:"
   echo "  --help, -h             Print this help message and exit"
   echo "  --no-preview, -P       Skip the preview before scanning"
-  echo "  --rotation, -r [deg]   Rotate image (0, 90, 180, 270)"
-  echo "  --size, -s [size]      Paper size (Letter, Legal, A4, A5)"
+  echo "  --rotation|-r [deg]   Rotate image (0|90|180|270)"
+  echo "  --size|-s [size]      Paper size (Letter|Legal|A4|A5)"
   echo "  --dpi, -d [dpi]        DPI resolution (auto|75|150|300|600|1200|2400)"
   echo "  --format, -f [format]  File format (pnm|tiff|png|jpeg|pdf)"
   echo "  --view, -v             View the file at the end of scanning"
@@ -75,6 +75,10 @@ while [[ $# -gt 0 ]]; do
     --rotation|-r)
       rotation="$2"
       shift 2
+      case "$rotation" in
+        0|90|180|270) ;;
+        *) echo "Error: Rotation is $rotation: must be 0|90|180|270"; exit 1; ;;
+      esac
       ;;
     --size|-s)
       size="$2"
@@ -207,7 +211,7 @@ case "$profile" in
     ;;
 
   practice)
-    dpi=${dpi:-1200}
+    dpi=${dpi:-600}
     format=${format:-png}
     output_file="${practice_dir}/${filename}.${format}"
     ;;
