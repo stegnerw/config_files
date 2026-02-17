@@ -1,14 +1,20 @@
 #!/bin/bash
-# docscan [title] [type] [options]
-# type: "practice" (1200 dpi PNG), "archive" (2400 dpi TIFF+PNG)
-# options: --preview (show preview first), --rotation [0|90|180|270], --size [Letter|Legal|A4|A5]
+# docscan [title] [profile] [options]
+# profile: "practice" (1200 dpi PNG), "archive" (2400 dpi TIFF+PNG)
 
-title="$1"
-type="${2:-practice}"
-rotation="0"
-size="Letter"
-preview_mode=false
-device="pixma:04A91913_5C6D6A"
+# Clean up tmp files on exit
+tmp_files=()
+cleanup() {
+  for f in "${tmp_files[@]}"; do
+    rm -f "$f"
+  done
+}
+trap cleanup EXIT
+
+# Ensure all required commands are here
+for cmd in scanimage magick feh notify-send; do
+  command -v "$cmd" &>/dev/null || { echo "Missing: $cmd"; exit 1; }
+done
 
 show_usage() {
   echo "Usage: $0 [title] [practice|archive] [options]"
@@ -22,19 +28,46 @@ show_usage() {
   echo "  --view, -v             View the file at the end of scanning"
   echo ""
   echo "Examples:"
-  echo "  $0 certificate archive --preview --size A5"
-  echo "  $0 practice_sheet practice -p -r 90"
+  echo "  $0 certificate archive --no-preview --size A5"
+  echo "  $0 practice_sheet practice -P -r 90"
   exit 1
 }
 
+# Early exit for --help anywhere in args
+for arg in "$@"; do
+  case "$arg" in
+    --help|-h) show_usage; exit 0 ;;
+  esac
+done
+
+# Named parameters
+title="$1"
+profile="${2:-practice}"
+
+if [[ -z "$title" || "$title" == -* ]]; then
+  echo "Error: title is required, got: $title"
+  show_usage
+  exit 1
+fi
+
+# Guard the shift — only shift what we actually have
+if [[ $# -ge 2 ]]; then
+  shift 2
+elif [[ $# -ge 1 ]]; then
+  shift 1
+fi
+
+# Default values and constants
+timestamp=$(date +%Y-%m-%dT%H%M%S)
+filename="${timestamp}_${title}"
+rotation="0"
+size="Letter"
+skip_preview=false
+device="pixma:04A91913_5C6D6A"
+
 # Parse optional flags
-shift 2
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --help|-h)
-      show_usage
-      exit 0
-      ;;
     --no-preview|-P)
       skip_preview=true
       shift
@@ -82,9 +115,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-date=$(date +%Y-%m-%d)
-filename="${date}_${title}"
-
 # Dropbox paths
 archive_dir="$HOME/Dropbox/calligraphy/archive"
 practice_dir="$HOME/Dropbox/calligraphy/practice"
@@ -92,7 +122,7 @@ practice_dir="$HOME/Dropbox/calligraphy/practice"
 mkdir -p "$archive_dir" "$practice_dir"
 
 # Paper size dimensions in mm
-case "${size:-Letter}" in
+case "${size}" in
     Letter)
       width=215.9
       height=279.4
@@ -111,8 +141,8 @@ case "${size:-Letter}" in
       ;;
     *)
       echo "Error: Unknown size - $size"
-      width=215.9
-      height=279.4
+      show_usage
+      exit 1
       ;;
 esac
 
@@ -121,33 +151,40 @@ do_scan() {
   local resolution=${1}
   local format=${2}
   local output_file=${3}
-  local tmp_file="/tmp/$(basename ${output_file})"
+  local tmp_file=$(mktemp /tmp/docscan_XXXXXXXXXX.${format})
+  tmp_files+=("$tmp_file")
 
   echo "Scanning at ${resolution} DPI ($size) -> ${output_file}"
-  scanimage --device ${device} \
+  scanimage --device "${device}" \
             --progress \
             --resolution "${resolution}" \
             --format="${format}" \
             --mode Color \
             -x "${width}" \
             -y "${height}" \
-            > "${output_file}"
+            > "${tmp_file}" \
+            || { echo "Error: scanimage failed"; exit 1; }
 
   if [ "${rotation}" != "0" ]; then
     echo "Rotating ${rotation} degrees..."
-    magick "${output_file}" -rotate "${rotation}" "${output_file}"
+    magick "${tmp_file}" -rotate "${rotation}" "${tmp_file}" \
+      || { echo "Error: magick failed"; exit 1; }
   fi
+
+  mv "${tmp_file}" "${output_file}" \
+    || { echo "Error: failed to move temp file to output location"; exit 1; }
 }
 
 show_preview() {
-  local preview_file="/tmp/scan_preview_${date}.png"
+  local preview_file=$(mktemp /tmp/docscan_XXXXXXXXXX.png)
+  tmp_files+=("$preview_file")
   do_scan 75 png "${preview_file}"
 
   feh "$preview_file" &
   feh_pid=$!
 
   echo ""
-  read -p "Preview displayed. Proceed with $type scan? (y/n): " -n 1 -r
+  read -p "Preview displayed. Proceed with $profile scan? (y/n): " -n 1 -r
   kill ${feh_pid} 2>/dev/null
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -162,7 +199,7 @@ if ! [ "$skip_preview" = true ]; then
 fi
 
 # Main scan
-case "$type" in
+case "$profile" in
   archive)
     dpi=${dpi:-2400}
     format=${format:-tiff}
@@ -176,13 +213,13 @@ case "$type" in
     ;;
 
   *)
-    echo "Unknown type: $type"
+    echo "Unknown profile: $profile"
     show_usage
     exit 1
     ;;
 esac
 
-do_scan $dpi $format "${output_file}"
+do_scan "$dpi" "$format" "${output_file}"
 echo "Saved: ${output_file}"
 
 notify-send --urgency=normal --icon=scanner "Scan Complete" "$(basename ${output_file})"
