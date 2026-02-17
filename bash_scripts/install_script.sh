@@ -10,7 +10,7 @@ if [ ! -d $BIN_DIR ]; then
 fi
 
 # Create symlinks and set execute
-for script in $(ls $BASE_DIR/*.sh); do
+for script in $(ls $BASE_DIR/*.sh $BASE_DIR/docscan); do
   script_name=$(basename $script)
   if [ $script_name == "install_script.sh" ]; then
     continue
