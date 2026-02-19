@@ -181,8 +181,12 @@ do_scan() {
   local resolution=${1}
   local format=${2}
   local output_file=${3}
-  local tmp_file=$(mktemp /tmp/docscan_XXXXXXXXXX.${format})
-  tmp_files+=("$tmp_file")
+  if [[ "${output_file}" == /tmp/* ]]; then
+    local tmp_file="${output_file}"
+  else
+    local tmp_file=$(mktemp /tmp/docscan_XXXXXXXXXX.${format})
+    tmp_files+=("$tmp_file")
+  fi
 
   echo "Scanning at ${resolution} DPI ($size) -> ${output_file}"
   scanimage --device "${device}" \
@@ -201,8 +205,12 @@ do_scan() {
       || { echo "Error: magick failed"; exit 1; }
   fi
 
-  mv "${tmp_file}" "${output_file}" \
-    || { echo "Error: failed to move temp file to output location"; exit 1; }
+  if [[ "${tmp_file}" != "${output_file}" ]]; then
+    mv "${tmp_file}" "${output_file}" || {
+      echo "Error: failed to move temp file to output location"
+      exit 1
+    }
+  fi
 }
 
 show_preview() {
