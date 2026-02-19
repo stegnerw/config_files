@@ -16,16 +16,26 @@ for cmd in scanimage magick feh notify-send; do
   command -v "$cmd" &>/dev/null || { echo "Missing: $cmd"; exit 1; }
 done
 
+# Validation regex
+valid_profiles="archive|practice"
+valid_rotations="0|90|180|270"
+valid_sizes="Letter|Legal|A4|A5"
+valid_dpis="auto|75|150|300|600|1200|2400"
+valid_formats="jpeg|pdf|png|pnm|tiff"
+valid_modes="Color|Gray|Lineart"
+
 show_usage() {
-  echo "Usage: $0 [title] [practice|archive] [options]"
+  echo "Usage: $0 title [$valid_profiles] [options]"
   echo "Options:"
-  echo "  --help, -h             Print this help message and exit"
-  echo "  --no-preview, -P       Skip the preview before scanning"
-  echo "  --rotation|-r [deg]   Rotate image (0|90|180|270)"
-  echo "  --size|-s [size]      Paper size (Letter|Legal|A4|A5)"
-  echo "  --dpi, -d [dpi]        DPI resolution (auto|75|150|300|600|1200|2400)"
-  echo "  --format, -f [format]  File format (pnm|tiff|png|jpeg|pdf)"
-  echo "  --view, -v             View the file at the end of scanning"
+  echo "  --help, -h              Print this help message and exit"
+  echo "  --profile, -p [profile] Scan profile ($valid_profiles)"
+  echo "  --no-preview, -P        Skip the preview before scanning"
+  echo "  --rotation|-r [deg]     Rotate image ($valid_rotations)"
+  echo "  --size|-s [size]        Paper size ($valid_sizes)"
+  echo "  --dpi, -d [dpi]         DPI resolution ($valid_dpis)"
+  echo "  --format, -f [format]   File format ($valid_formats)"
+  echo "  --view, -v              View the file at the end of scanning"
+  echo "  --mode, -m [mode]       Color mode ($valid_modes)"
   echo ""
   echo "Examples:"
   echo "  $0 certificate archive --no-preview --size A5"
@@ -35,39 +45,44 @@ show_usage() {
 
 # Early exit for --help anywhere in args
 for arg in "$@"; do
-  case "$arg" in
-    --help|-h) show_usage; exit 0 ;;
-  esac
+  if [[ "$arg" =~ ^(--help|-h)$ ]]; then
+    show_usage
+    exit 0
+  fi
 done
 
-# Named parameters
+# Required parameters
 title="$1"
-profile="${2:-practice}"
-
+shift 1
 if [[ -z "$title" || "$title" == -* ]]; then
   echo "Error: title is required, got: $title"
   show_usage
   exit 1
 fi
 
-# Guard the shift — only shift what we actually have
-if [[ $# -ge 2 ]]; then
-  shift 2
-elif [[ $# -ge 1 ]]; then
-  shift 1
-fi
-
-# Default values and constants
+# Non-user-defined values
 timestamp=$(date +%Y-%m-%dT%H%M%S)
 filename="${timestamp}_${title}"
-rotation="0"
-size="Letter"
-skip_preview=false
 device="pixma:04A91913_5C6D6A"
 
+# Default values for flags
+profile="practice"
+rotation="0"
+size="A5"
+skip_preview=false
+
 # Parse optional flags
+bad_flags=0
 while [[ $# -gt 0 ]]; do
   case $1 in
+    --profiles|-p)
+      profile="$2"
+      shift 2
+      if [[ ! "$profile" =~ ^($valid_profiles)$ ]]; then
+        echo "Error: Unsupported profile - $profile"
+        bad_flags=$((bad_flags+1))
+      fi
+      ;;
     --no-preview|-P)
       skip_preview=true
       shift
@@ -75,49 +90,60 @@ while [[ $# -gt 0 ]]; do
     --rotation|-r)
       rotation="$2"
       shift 2
-      case "$rotation" in
-        0|90|180|270) ;;
-        *) echo "Error: Rotation is $rotation: must be 0|90|180|270"; exit 1; ;;
-      esac
+      if [[ ! "$rotation" =~ ^($valid_rotations)$ ]]; then
+        echo "Error: Unsupported rotation - $rotation"
+        bad_flags=$((bad_flags+1))
+      fi
       ;;
     --size|-s)
       size="$2"
       shift 2
+      if [[ ! "$size" =~ ^($valid_sizes)$ ]]; then
+        echo "Error: Unsupported size - $size"
+        bad_flags=$((bad_flags+1))
+      fi
       ;;
     --dpi|-d)
       dpi="$2"
       shift 2
-      case "$dpi" in
-        auto|75|150|300|600|1200|2400) ;;
-        *)
-          echo "Error: Unsupported DPI - $dpi"
-          show_usage
-          exit 1
-          ;;
-      esac
+      if [[ ! "$dpi" =~ ^($valid_dpis)$ ]]; then
+        echo "Error: Unsupported DPI - $dpi"
+        bad_flags=$((bad_flags+1))
+      fi
       ;;
     --format|-f)
       format="$2"
       shift 2
-      case "$format" in
-        pnm|tiff|png|jpeg|pdf) ;;
-        *)
-          echo "Error: Unsupported format - $format"
-          show_usage
-          exit 1
-          ;;
-      esac
+      if [[ ! "$format" =~ ^($valid_formats)$ ]]; then
+        echo "Error: Unsupported format - $format"
+        bad_flags=$((bad_flags+1))
+      fi
       ;;
     --view|-v)
       view_result=true
       shift
       ;;
+    --mode|-m)
+      mode="$2"
+      shift 2
+      if [[ ! "$mode" =~ ^($valid_modes)$ ]]; then
+        echo "Error: Unsupported mode - $mode"
+        bad_flags=$((bad_flags+1))
+      fi
+      ;;
     *)
       echo "Unknown option: $1"
-      exit 1
+      shift
+      bad_flags=$((bad_flags+1))
       ;;
   esac
 done
+
+if [[ $bad_flags -gt 0 ]]; then
+  echo "Error: $bad_flags bad flag(s) detected"
+  show_usage
+  exit 1
+fi
 
 # Dropbox paths
 archive_dir="$HOME/Dropbox/calligraphy/archive"
@@ -207,12 +233,14 @@ case "$profile" in
   archive)
     dpi=${dpi:-2400}
     format=${format:-tiff}
+    mode=${mode:-Color}
     output_file="${archive_dir}/${filename}.${format}"
     ;;
 
   practice)
     dpi=${dpi:-600}
     format=${format:-png}
+    mode=${mode:-Gray}
     output_file="${practice_dir}/${filename}.${format}"
     ;;
 
