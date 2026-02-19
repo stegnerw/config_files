@@ -152,7 +152,7 @@ practice_dir="$HOME/Dropbox/calligraphy/practice"
 mkdir -p "$archive_dir" "$practice_dir"
 
 # Paper size dimensions in mm
-case "${size}" in
+case "$size" in
     Letter)
       width=215.9
       height=279.4
@@ -178,65 +178,42 @@ esac
 
 # Usage: do_scan resolution format output_file
 do_scan() {
-  local resolution=${1}
-  local format=${2}
-  local output_file=${3}
-  if [[ "${output_file}" == /tmp/* ]]; then
-    local tmp_file="${output_file}"
+  local resolution="$1"
+  local format="$2"
+  local output_file="$3"
+  if [[ "$output_file" == /tmp/* ]]; then
+    local tmp_file="$output_file"
   else
-    local tmp_file=$(mktemp /tmp/docscan_XXXXXXXXXX.${format})
+    local tmp_file=$(mktemp /tmp/docscan_XXXXXXXXXX.$format)
     tmp_files+=("$tmp_file")
   fi
 
-  echo "Scanning at ${resolution} DPI ($size) -> ${output_file}"
-  scanimage --device "${device}" \
+  echo "Scanning at $resolution DPI ($size) -> $output_file"
+  scanimage --device "$device" \
             --progress \
-            --resolution "${resolution}" \
-            --format="${format}" \
-            --mode Color \
-            -x "${width}" \
-            -y "${height}" \
-            > "${tmp_file}" \
+            --resolution "$resolution" \
+            --format="$format" \
+            --mode "$mode" \
+            -x "$width" \
+            -y "$height" \
+            > "$tmp_file" \
             || { echo "Error: scanimage failed"; exit 1; }
 
-  if [ "${rotation}" != "0" ]; then
-    echo "Rotating ${rotation} degrees..."
-    magick "${tmp_file}" -rotate "${rotation}" "${tmp_file}" \
+  if [ "$rotation" != "0" ]; then
+    echo "Rotating $rotation degrees..."
+    magick "$tmp_file" -rotate "$rotation" "$tmp_file" \
       || { echo "Error: magick failed"; exit 1; }
   fi
 
-  if [[ "${tmp_file}" != "${output_file}" ]]; then
-    mv "${tmp_file}" "${output_file}" || {
+  if [[ "$tmp_file" != "$output_file" ]]; then
+    mv "$tmp_file" "$output_file" || {
       echo "Error: failed to move temp file to output location"
       exit 1
     }
   fi
 }
 
-show_preview() {
-  local preview_file=$(mktemp /tmp/docscan_XXXXXXXXXX.png)
-  tmp_files+=("$preview_file")
-  do_scan 75 png "${preview_file}"
-
-  feh "$preview_file" &
-  feh_pid=$!
-
-  echo ""
-  read -p "Preview displayed. Proceed with $profile scan? (y/n): " -n 1 -r
-  kill ${feh_pid} 2>/dev/null
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Scan cancelled."
-    exit 0
-  fi
-}
-
-# Show preview if requested
-if ! [ "$skip_preview" = true ]; then
-  show_preview
-fi
-
-# Main scan
+# Configure scan parameters
 case "$profile" in
   archive)
     dpi=${dpi:-2400}
@@ -259,10 +236,35 @@ case "$profile" in
     ;;
 esac
 
-do_scan "$dpi" "$format" "${output_file}"
-echo "Saved: ${output_file}"
+show_preview() {
+  local preview_file=$(mktemp /tmp/docscan_XXXXXXXXXX.png)
+  tmp_files+=("$preview_file")
+  do_scan 75 png "$preview_file"
 
-notify-send --urgency=normal --icon=scanner "Scan Complete" "$(basename ${output_file})"
+  feh "$preview_file" &
+  feh_pid=$!
+
+  echo ""
+  read -p "Preview displayed. Proceed with $profile scan? (y/n): " -n 1 -r
+  kill $feh_pid 2>/dev/null
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Scan cancelled."
+    exit 0
+  fi
+}
+
+# Show preview if requested
+if ! [ "$skip_preview" = true ]; then
+  show_preview
+fi
+
+# Do the actual scan
+do_scan "$dpi" "$format" "$output_file"
+echo "Saved: $output_file"
+
+notify-send --urgency=normal --icon=scanner \
+  "Scan Complete" "$(basename $output_file)"
 if [ "$view_result" = true ]; then
-  feh --scale-down "${output_file}"
+  feh --scale-down "$output_file"
 fi
