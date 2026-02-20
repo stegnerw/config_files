@@ -1,8 +1,7 @@
-#!/bin/bash
-# docscan [title] [profile] [options]
-# profile: "practice" (600 dpi PNG), "archive" (2400 dpi TIFF+PNG)
+#!/usr/bin/env bash
 
-# Clean up tmp files on exit
+# --- Traps ---
+
 tmp_files=()
 cleanup() {
   for f in "${tmp_files[@]}"; do
@@ -11,260 +10,390 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# Ensure all required commands are here
+tmp_dir="/tmp/docscan"
+mkdir -p "$tmp_dir"
+
+# --- Check Dependencies ---
+
 for cmd in scanimage magick feh notify-send; do
   command -v "$cmd" &>/dev/null || { echo "Missing: $cmd"; exit 1; }
 done
 
+# --- Global Definitions ---
+
+# Non-user-defined values
+config_file="$HOME/.config/docscan/config.ini"
+timestamp="$(date +%Y-%m-%dT%H%M%S)"
+filename=""
+device="pixma:04A91913_5C6D6A"
+preview_prompt="Proceed with scan?"
+
+# Default values for flags and parameters
+dry_run=false
+title=""
+output_file=""
+page_size="A5"
+rotation="0"
+scan_prompt=""
+skip_preview=false
+scan_width=0
+scan_height=0
+link_profiles=()
+
+# Deliberately unset - profile configs with manual overrides
+unset_globals=(profile dpi output_dir output_format color_mode)
+for var in "${unset_globals[@]}"; do
+  declare "$var"
+done
+
 # Validation regex
-valid_profiles="archive|practice"
 valid_rotations="0|90|180|270"
-valid_sizes="Letter|Legal|A4|A5"
+valid_page_sizes="Letter|Legal|A4|A5"
 valid_dpis="auto|75|150|300|600|1200|2400"
-valid_formats="jpeg|pdf|png|pnm|tiff"
-valid_modes="Color|Gray|Lineart"
+valid_output_formats="jpeg|pdf|png|pnm|tiff"
+valid_color_modes="Color|Gray|Lineart"
+
+# --- Usage ---
 
 show_usage() {
-  echo "Usage: $0 title [$valid_profiles] [options]"
+  echo "Usage: $0 title [options]"
   echo "Options:"
   echo "  --help, -h              Print this help message and exit"
-  echo "  --profile, -p [profile] Scan profile ($valid_profiles)"
+  echo "  --dry-run, -n           Print effective parameters and exit"
+  echo "  --profile, -p [profile] Scan profile defined in $config_file"
   echo "  --no-preview, -P        Skip the preview before scanning"
-  echo "  --rotation|-r [deg]     Rotate image ($valid_rotations)"
-  echo "  --size|-s [size]        Paper size ($valid_sizes)"
+  echo "  --rotation, -r [deg]    Rotate image ($valid_rotations)"
+  echo "  --size, -s [size]       Page size ($valid_page_sizes)"
   echo "  --dpi, -d [dpi]         DPI resolution ($valid_dpis)"
-  echo "  --format, -f [format]   File format ($valid_formats)"
+  echo "  --format, -f [format]   File format ($valid_output_formats)"
   echo "  --view, -v              View the file at the end of scanning"
-  echo "  --mode, -m [mode]       Color mode ($valid_modes)"
+  echo "  --mode, -m [mode]       Color mode ($valid_color_modes)"
+  echo "  --link|-L [profile]     Symbolic link the scan to other profiles"
   echo ""
   echo "Examples:"
-  echo "  $0 certificate archive --no-preview --size A5"
-  echo "  $0 practice_sheet practice -P -r 90"
+  echo "  $0 certificate --profile calligraphy:archive --no-preview --size A5"
+  echo "  $0 practice_sheet -P -r 90"
   exit 1
 }
 
-# Early exit for --help anywhere in args
-for arg in "$@"; do
-  if [[ "$arg" =~ ^(--help|-h)$ ]]; then
+# --- Argument Parsing ---
+
+parse_args() {
+  # Early exit for --help anywhere in args
+  for arg in "$@"; do
+    if [[ "$arg" =~ ^(--help|-h)$ ]]; then
+      show_usage
+      exit 0
+    fi
+  done
+
+  # Required parameters
+  title="$1"
+  shift 1
+  if [[ -z "$title" || "$title" == -* ]]; then
+    echo "Error: title is required, got: $title"
     show_usage
+    exit 1
+  fi
+  filename="${timestamp}_${title}"
+
+  # Parse optional flags
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --dry-run|-n)
+        dry_run=true
+        shift 1
+        ;;
+      --profile|-p)
+        profile="$2"
+        shift 2
+        ;;
+      --no-preview|-P)
+        skip_preview=true
+        shift
+        ;;
+      --rotation|-r)
+        rotation="$2"
+        shift 2
+        ;;
+      --size|-s)
+        page_size="$2"
+        shift 2
+        ;;
+      --dpi|-d)
+        dpi="$2"
+        shift 2
+        ;;
+      --format|-f)
+        output_format="$2"
+        shift 2
+        ;;
+      --view|-v)
+        scan_prompt="Save scan?"
+        shift
+        ;;
+      --mode|-m)
+        color_mode="$2"
+        shift 2
+        ;;
+      --link|-L)
+        link_profiles+=("$2")
+        shift 2
+        ;;
+      *)
+        echo "Warning: Unknown option: $1"
+        shift
+        ;;
+    esac
+  done
+
+  # Page size dimensions in mm
+  case "$page_size" in
+      Letter)
+        scan_width=215.9
+        scan_height=279.4
+        ;;
+      Legal)
+        scan_width=215.9
+        scan_height=355.6
+        ;;
+      A4)
+        scan_width=210
+        scan_height=297
+        ;;
+      A5)
+        scan_width=148
+        scan_height=210
+        ;;
+      *)
+        echo "BUG: Unhandled size '$page_size' - update the case statement"
+        exit 2
+        ;;
+  esac
+}
+
+# --- Config Parsing ---
+
+preprocess_config() {
+  sed -e '/^[[:space:]]*[#;]/d' \
+      -e '/^[[:space:]]*$/d' \
+      -e 's/^[[:space:]]*//' \
+      -e 's/[[:space:]]*=[[:space:]]*/=/' \
+      -e 's/[[:space:]]*$//' \
+      "$config_file"
+}
+
+parse_config() {
+  if [[ ! -f "$config_file" ]]; then
+    echo "Error: could not read config file: $config_file"
+    exit 1
+  fi
+
+  local first_section=$(grep -m1 '^\[' "$config_file")
+  if [[ "$first_section" != "[general]" ]]; then
+    echo "Error: [general] must be the first section in config"
+    exit 1
+  fi
+
+  local section=""
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    # Section header
+    if [[ "$line" =~ ^\[(.+)\]$ ]]; then
+      section="${BASH_REMATCH[1]}"
+      continue
+    fi
+
+    # key=val
+    if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
+      local key="${BASH_REMATCH[1]}"
+      local val="${BASH_REMATCH[2]}"
+
+      # Expand $HOME in values
+      val="${val//\$HOME/$HOME}"
+
+      if [[ "$section" == "general" ]]; then
+        case "$key" in
+          device) device="$val" ;;
+          default_profile) profile="${profile:-$val}" ;;
+        esac
+      elif [[ "$section" == "profile:$profile" ]]; then
+        case "$key" in
+          dir) output_dir="${output_dir:-$val}" ;;
+          dpi) dpi="${dpi:-$val}" ;;
+          format) output_format="${output_format:-$val}" ;;
+          mode) color_mode="${color_mode:-$val}" ;;
+          *)
+            echo "Warning: Unknown key pair: ${key}=${val}"
+            echo "         Check profile:$profile in $config_file"
+            ;;
+        esac
+      fi
+    fi
+  done < <(preprocess_config)
+}
+
+# --- Validate Configuration ---
+
+validate_config() {
+  local bad_configs=0
+
+  # Validate required variables are set
+  for var in "${unset_globals[@]}"; do
+    if [[ -z "${!var}" ]]; then
+      echo "Error: '$var' not set - check 'profile:$profile' in $config_file"
+      bad_configs=$((bad_configs+1))
+    fi
+  done
+
+  # Validate values against allowed options
+  if [[ -n "$dpi" && ! "$dpi" =~ ^($valid_dpis)$ ]]; then
+    echo "Error: Unsupported DPI - $dpi"
+    bad_configs=$((bad_configs+1))
+  fi
+  if [[ -n "$output_format" \
+        && ! "$output_format" =~ ^($valid_output_formats)$ ]]; then
+    echo "Error: Unsupported format - $output_format"
+    bad_configs=$((bad_configs+1))
+  fi
+  if [[ -n "$color_mode" && ! "$color_mode" =~ ^($valid_color_modes)$ ]]; then
+    echo "Error: Unsupported mode - $color_mode"
+    bad_configs=$((bad_configs+1))
+  fi
+  if [[ -n "$rotation" && ! "$rotation" =~ ^($valid_rotations)$ ]]; then
+    echo "Error: Unsupported rotation - $rotation"
+    bad_configs=$((bad_configs+1))
+  fi
+  if [[ -n "$page_size" && ! "$page_size" =~ ^($valid_page_sizes)$ ]]; then
+    echo "Error: Unsupported size - $page_size"
+    bad_configs=$((bad_configs+1))
+  fi
+
+  if [[ $bad_configs -gt 0 ]]; then
+    echo "Error: $bad_configs bad config value(s) detected"
+    echo "       Check profile:$profile in $config_file"
+    echo
+    show_usage
+    exit 1
+  fi
+
+  # Dry run
+  local preview=false view=true
+  [[ "$skip_preview" == true ]] && local preview=false
+  [[ -z "$scan_prompt" ]] && view=false
+  if [[ "$dry_run" == true ]]; then
+    echo "Dry run:"
+    echo "  profile:    $profile"
+    echo "  dpi:        $dpi"
+    echo "  format:     $output_format"
+    echo "  mode:       $color_mode"
+    echo "  size:       $page_size"
+    echo "     x:       $scan_width mm"
+    echo "     y:       $scan_height mm"
+    echo "  rotation:   $rotation"
+    echo "  output:     $output_file"
+    echo "  preview:    $preview"
+    echo "  view:       $view"
+    echo "  device:     $device"
     exit 0
   fi
-done
+}
 
-# Required parameters
-title="$1"
-shift 1
-if [[ -z "$title" || "$title" == -* ]]; then
-  echo "Error: title is required, got: $title"
-  show_usage
-  exit 1
-fi
+# --- Core Logic ---
 
-# Non-user-defined values
-timestamp=$(date +%Y-%m-%dT%H%M%S)
-filename="${timestamp}_${title}"
-device="pixma:04A91913_5C6D6A"
-
-# Default values for flags
-profile="practice"
-rotation="0"
-size="A5"
-skip_preview=false
-
-# Parse optional flags
-bad_flags=0
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    --profiles|-p)
-      profile="$2"
-      shift 2
-      if [[ ! "$profile" =~ ^($valid_profiles)$ ]]; then
-        echo "Error: Unsupported profile - $profile"
-        bad_flags=$((bad_flags+1))
-      fi
-      ;;
-    --no-preview|-P)
-      skip_preview=true
-      shift
-      ;;
-    --rotation|-r)
-      rotation="$2"
-      shift 2
-      if [[ ! "$rotation" =~ ^($valid_rotations)$ ]]; then
-        echo "Error: Unsupported rotation - $rotation"
-        bad_flags=$((bad_flags+1))
-      fi
-      ;;
-    --size|-s)
-      size="$2"
-      shift 2
-      if [[ ! "$size" =~ ^($valid_sizes)$ ]]; then
-        echo "Error: Unsupported size - $size"
-        bad_flags=$((bad_flags+1))
-      fi
-      ;;
-    --dpi|-d)
-      dpi="$2"
-      shift 2
-      if [[ ! "$dpi" =~ ^($valid_dpis)$ ]]; then
-        echo "Error: Unsupported DPI - $dpi"
-        bad_flags=$((bad_flags+1))
-      fi
-      ;;
-    --format|-f)
-      format="$2"
-      shift 2
-      if [[ ! "$format" =~ ^($valid_formats)$ ]]; then
-        echo "Error: Unsupported format - $format"
-        bad_flags=$((bad_flags+1))
-      fi
-      ;;
-    --view|-v)
-      view_result=true
-      shift
-      ;;
-    --mode|-m)
-      mode="$2"
-      shift 2
-      if [[ ! "$mode" =~ ^($valid_modes)$ ]]; then
-        echo "Error: Unsupported mode - $mode"
-        bad_flags=$((bad_flags+1))
-      fi
-      ;;
-    *)
-      echo "Unknown option: $1"
-      shift
-      bad_flags=$((bad_flags+1))
-      ;;
-  esac
-done
-
-if [[ $bad_flags -gt 0 ]]; then
-  echo "Error: $bad_flags bad flag(s) detected"
-  show_usage
-  exit 1
-fi
-
-# Dropbox paths
-archive_dir="$HOME/Dropbox/calligraphy/archive"
-practice_dir="$HOME/Dropbox/calligraphy/practice"
-
-mkdir -p "$archive_dir" "$practice_dir"
-
-# Paper size dimensions in mm
-case "$size" in
-    Letter)
-      width=215.9
-      height=279.4
-      ;;
-    Legal)
-      width=215.9
-      height=355.6
-      ;;
-    A4)
-      width=210
-      height=297
-      ;;
-    A5)
-      width=148
-      height=210
-      ;;
-    *)
-      echo "Error: Unknown size - $size"
-      show_usage
-      exit 1
-      ;;
-esac
-
-# Usage: do_scan resolution format output_file
 do_scan() {
+  if [[ "$#" -lt 3 ]]; then
+    echo "BUG - do_scan must have at least 3 parameters - got $#"
+    return 1
+  fi
   local resolution="$1"
-  local format="$2"
+  local output_format="$2"
   local output_file="$3"
+  local prompt="${4:-}"
+
+  # Set up temp file - reuse output_file if it's already temp
   if [[ "$output_file" == /tmp/* ]]; then
     local tmp_file="$output_file"
   else
-    local tmp_file=$(mktemp /tmp/docscan_XXXXXXXXXX.$format)
+    local tmp_file=$(mktemp "$tmp_dir/XXXXXXXXXX.$output_format")
     tmp_files+=("$tmp_file")
   fi
 
-  echo "Scanning at $resolution DPI ($size) -> $output_file"
-  scanimage --device "$device" \
-            --progress \
-            --resolution "$resolution" \
-            --format="$format" \
-            --mode "$mode" \
-            -x "$width" \
-            -y "$height" \
-            > "$tmp_file" \
-            || { echo "Error: scanimage failed"; exit 1; }
+  local scanning=true
+  while [[ "$scanning" == true ]]; do
+    echo "Scanning at $resolution DPI ($page_size) -> $output_file"
+    scanimage --device "$device" \
+              --progress \
+              --resolution "$resolution" \
+              --format="$output_format" \
+              --mode "$color_mode" \
+              -x "$scan_width" \
+              -y "$scan_height" \
+              > "$tmp_file" \
+              || { echo "Error: scanimage failed"; exit 1; }
 
-  if [ "$rotation" != "0" ]; then
-    echo "Rotating $rotation degrees..."
-    magick "$tmp_file" -rotate "$rotation" "$tmp_file" \
-      || { echo "Error: magick failed"; exit 1; }
-  fi
+    if [[ "$rotation" != "0" ]]; then
+      echo "Rotating $rotation degrees..."
+      magick "$tmp_file" -rotate "$rotation" "$tmp_file" \
+        || { echo "Error: magick failed"; exit 1; }
+    fi
 
+    if [[ -n "$prompt" ]]; then
+      feh --scale-down "$tmp_file" &
+      feh_pid=$!
+
+      read -p "$prompt [y/n/r]: " -n 1 -r
+      [[ -n "$feh_pid" ]] && kill $feh_pid 2>/dev/null
+      echo
+
+      case "$REPLY" in
+        [Yy]) scanning=false ;;
+        [Nn])
+          echo "Scan discarded."
+          return 1
+          ;;
+        [Rr]) continue ;;
+        *)
+          echo "Unknown option - saving."
+          scanning=false
+          ;;
+      esac
+    else
+      scanning=false
+    fi
+  done
+
+  # Move the temp file to the output location
   if [[ "$tmp_file" != "$output_file" ]]; then
     mv "$tmp_file" "$output_file" || {
       echo "Error: failed to move temp file to output location"
       exit 1
     }
   fi
+  return 0
 }
 
-# Configure scan parameters
-case "$profile" in
-  archive)
-    dpi=${dpi:-2400}
-    format=${format:-tiff}
-    mode=${mode:-Color}
-    output_file="${archive_dir}/${filename}.${format}"
-    ;;
-
-  practice)
-    dpi=${dpi:-600}
-    format=${format:-png}
-    mode=${mode:-Gray}
-    output_file="${practice_dir}/${filename}.${format}"
-    ;;
-
-  *)
-    echo "Unknown profile: $profile"
-    show_usage
-    exit 1
-    ;;
-esac
-
 show_preview() {
-  local preview_file=$(mktemp /tmp/docscan_XXXXXXXXXX.png)
+  local preview_file=$(mktemp "$tmp_dir/XXXXXXXXXX.png")
   tmp_files+=("$preview_file")
-  do_scan 75 png "$preview_file"
-
-  feh "$preview_file" &
-  feh_pid=$!
-
-  echo ""
-  read -p "Preview displayed. Proceed with $profile scan? (y/n): " -n 1 -r
-  kill $feh_pid 2>/dev/null
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Scan cancelled."
+  if ! do_scan 75 png "$preview_file" "$preview_prompt"; then
     exit 0
   fi
 }
 
-# Show preview if requested
-if ! [ "$skip_preview" = true ]; then
+# --- Main ---
+
+parse_args "$@"
+parse_config
+output_file="${output_dir}/${filename}.${output_format}"
+validate_config
+mkdir -p "$output_dir"
+
+if ! [[ "$skip_preview" = true ]]; then
   show_preview
 fi
 
-# Do the actual scan
-do_scan "$dpi" "$format" "$output_file"
-echo "Saved: $output_file"
-
-notify-send --urgency=normal --icon=scanner \
-  "Scan Complete" "$(basename $output_file)"
-if [ "$view_result" = true ]; then
-  feh --scale-down "$output_file"
+if do_scan "$dpi" "$output_format" "$output_file" "$scan_prompt"; then
+  echo "Saved: $output_file"
+  notify-send --urgency=normal --icon=scanner \
+    "Scan Complete" "$(basename $output_file)"
 fi
