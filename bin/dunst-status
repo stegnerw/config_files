@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+mkdir -p $HOME/.config/dunst
 if [ $(dunstctl is-paused) = true ]; then
-  rm -f ~/.config/dunst/is_on
+  rm -f $HOME/dunst/is_on
 else
-  touch ~/.config/dunst/is_on
+  touch $HOME/dunst/is_on
 fi

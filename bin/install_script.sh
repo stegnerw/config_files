@@ -5,12 +5,10 @@ BASE_DIR=$(realpath $(dirname "$0"))
 BIN_DIR=$HOME/.bin
 
 # Create necessary directories
-if [ ! -d $BIN_DIR ]; then
-  mkdir $BIN_DIR
-fi
+mkdir -p $BIN_DIR
 
 # Create symlinks and set execute
-for script in $(ls $BASE_DIR/*.sh $BASE_DIR/docscan); do
+for script in $(ls $BASE_DIR/*); do
   script_name=$(basename $script)
   if [ $script_name == "install_script.sh" ]; then
     continue
