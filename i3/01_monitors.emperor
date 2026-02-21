@@ -1,9 +1,0 @@
-################################################################################
-# MONITORS
-################################################################################
-#
-# Assign values for primary and secondary monitors
-set $mon_prim DisplayPort-3
-set $mon_sec  DisplayPort-4
-
-
