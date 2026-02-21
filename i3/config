@@ -1,10 +1,10 @@
 # i3 config file (v4)
 # See https://i3wm.org/docs/userguide.html for a complete reference
-
 include ~/.config/i3/conf.d/monitors.conf
+include ~/.config/i3/conf.d/globals.conf
 include ~/.config/i3/conf.d/colors.conf
-include ~/.config/i3/conf.d/variables_modes.conf
-include ~/.config/i3/conf.d/window_configs.conf
+include ~/.config/i3/conf.d/modes.conf
+include ~/.config/i3/conf.d/windows.conf
 include ~/.config/i3/conf.d/keybinds.conf
 include ~/.config/i3/conf.d/bar.conf
 include ~/.config/i3/conf.d/startup.conf
