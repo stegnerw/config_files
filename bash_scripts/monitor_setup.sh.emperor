@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# Set primary monitor on left and secondary monitor on right
-xrandr --output DisplayPort-3 --primary --mode 2560x1440 --rate 144.00
-xrandr --output DisplayPort-4 --right-of DisplayPort-3 --mode 2560x1440 --rate 144.00
-
-# Restart i3
-i3-msg restart

@@ -19,11 +19,4 @@ for script in $(ls $BASE_DIR/*.sh $BASE_DIR/docscan); do
   ln -sf $script $BIN_DIR/$script_name
 done
 
-for script in $(ls $BASE_DIR/*.$(hostname)); do
-  script_name=$(basename $script .$(hostname))
-  chmod 0755 $script
-  ln -sf $script $BIN_DIR/$script_name
-done
-
 exit 0
-
