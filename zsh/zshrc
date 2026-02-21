@@ -118,9 +118,6 @@ unset __conda_setup
 # Export for GPG signing
 export GPG_TTY=$(tty)
 
-# Export for SSH agent integration with Bitwarden
-export SSH_AUTH_SOCK=/home/${USER}/.bitwarden-ssh-agent.sock
-
 # Begin: PlatformIO Core completion support
 eval "$(_PIO_COMPLETE=zsh_source pio)"
 # End: PlatformIO Core completion support
