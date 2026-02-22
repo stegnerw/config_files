@@ -12,7 +12,8 @@ notify() {
   local replace_id
   replace_id=$(( $(echo "${BLOCK_NAME:-i3blocks}" |
     cksum | awk '{print $1}') % 2147483647 ))
-  notify-send -r "$replace_id" -a "i3blocks" -u critical "$title" "$body"
+  notify-send -t 5000 -r "$replace_id" -a "i3blocks" -u critical \
+    "$title" "$body"
 }
 
 # Return a hex color based on value and thresholds.
