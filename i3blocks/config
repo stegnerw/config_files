@@ -11,6 +11,9 @@ separator_block_width=15
 markup=pango
 command=$HOME/.config/i3blocks/scripts/$BLOCK_NAME
 
+[updates]
+interval=300
+
 [volume]
 # Left click: mixer | Right click: mute | Scroll: volume
 interval=1

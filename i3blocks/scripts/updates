@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/helper.bash"
+
+# --- Environment Variables ---
+
+UPDATES_AUR="${UPDATES_AUR:-no}"
+UPDATES_AUR_DIR="${UPDATES_AUR_DIR:-}"
+
+# --- Core Logic ---
+
+mapfile -t updates < <(checkupdates 2>/dev/null)
+update_count="${#updates[@]}"
+
+# If checkupdates returned nothing, the array has one empty element
+if [ "$update_count" -eq 1 ] && [ -z "${updates[0]}" ]; then
+  update_count=0
+  updates=()
+fi
+
+# Check for security-relevant updates via arch-audit
+security_list=""
+security_count=0
+if command -v arch-audit &>/dev/null && [ "$update_count" -gt 0 ]; then
+  security_list=$(arch-audit -u -q 2>/dev/null)
+  if [ -n "$security_list" ]; then
+    security_count=$(echo "$security_list" | wc -l)
+  fi
+fi
+
+# Click: show package list with security details
+if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+  if [ "$update_count" -eq 0 ]; then
+    notify "Updates" "System is up to date"
+  else
+    body=""
+    if [ -n "$security_list" ]; then
+      body+="⚠ Security:\n${security_list}\n\n"
+    fi
+    # Package list: name old -> new
+    pkg_list=$(printf '%s\n' "${updates[@]}" \
+      | awk '{printf "%s %s → %s\n", $1, $2, $4}')
+    body+="${pkg_list}"
+    notify "Updates ($update_count)" "$body"
+  fi
+fi
+
+if [ "$update_count" -eq 0 ]; then
+  # Quiet when up to date
+  echo " up to date"
+  echo ""
+  echo "$COLOR_GREEN"
+  exit 0
+fi
+
+if [ "$security_count" -gt 0 ]; then
+  color="$COLOR_RED"
+  echo "󰚰 $update_count ($security_count security)"
+else
+  color="$COLOR_YELLOW"
+  echo "󰚰 $update_count"
+fi
+echo "󰚰"
+echo "$color"
