@@ -5,58 +5,51 @@
 # Click any block to get full details via dunst notification.
 # Signal a block to force refresh: pkill -RTMIN+<signal> i3blocks
 
-[global]
+# [global]
 separator=true
 separator_block_width=15
 markup=pango
+command=$HOME/.config/i3blocks/scripts/$BLOCK_NAME
 
 [volume]
 # Left click: mixer | Right click: mute | Scroll: volume
-command=~/.config/i3blocks/scripts/volume
 interval=1
 signal=1
 
 [notif]
 # Left click: toggle notifications
-command=~/.config/i3blocks/scripts/notif
 interval=1
 signal=2
 
 [network]
 # Left click: show full connection details
-command=~/.config/i3blocks/scripts/network
 interval=10
 signal=3
 
 [bat]
 # Left click: show detailed battery info
 # Outputs nothing on desktops (no separator rendered)
-command=~/.config/i3blocks/scripts/bat
 interval=30
 signal=4
 
 [load]
 # Left click: show 1m/5m/15m averages
-command=~/.config/i3blocks/scripts/load
 interval=5
 signal=5
 
 [temp]
 # Left click: show per-sensor breakdown
-command=~/.config/i3blocks/scripts/temp
 interval=5
 signal=6
 
 [ram]
 # Left click: show used/total
-command=~/.config/i3blocks/scripts/ram
 interval=5
 signal=7
 
 [disk]
 # Left click: show used/total
 instance=/
-command=~/.config/i3blocks/scripts/disk
 interval=60
 signal=8
 
