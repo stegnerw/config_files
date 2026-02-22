@@ -1,0 +1,12 @@
+#!/bin/bash
+# Usage: vol-up [delta]
+delta=${1:-5}
+vol=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null |
+        grep -oP '\d+%' |
+        head -1 |
+        tr -d '%')
+new_vol=$(( vol + delta > 100 ? 100 : vol + delta ))
+pactl set-sink-volume @DEFAULT_SINK@ ${new_vol}%
+
+# Signal i3blocks to redraw volume block
+pkill -RTMIN+1 i3blocks

@@ -1,0 +1,5 @@
+#!/bin/bash
+pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Signal i3blocks to redraw volume block
+pkill -RTMIN+1 i3blocks
