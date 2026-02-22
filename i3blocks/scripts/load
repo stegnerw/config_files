@@ -1,0 +1,22 @@
+#!/bin/bash
+source "$(dirname "$0")/helper.sh"
+
+read -r load1 load5 load15 _ < /proc/loadavg
+nproc=$(nproc)
+
+# Click: show full load breakdown
+if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+  load_string="${load1} / ${load5} / ${load15} (1m / 5m / 15m)"
+  cpu_usage=$(awk '/^cpu / {
+    total = 0; idle = $5;
+    for (i=2; i<=NF; i++) total += $i;
+    printf "%.0f", (1 - idle/total) * 100
+  }' /proc/stat)
+  notify "System Load" \
+    "Load: ${load_string}\nCPU: ${cpu_usage}%\nCores: ${nproc}"
+fi
+
+color=$(threshold_color "$load1" "$nproc" "$(( nproc * 2 ))")
+echo " ${load1}"
+echo ""
+echo "$color"

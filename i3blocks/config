@@ -35,12 +35,12 @@ command=~/.config/i3blocks/scripts/battery
 interval=30
 signal=4
 
-#[load]
-## Left click: show 1m/5m/15m averages
-#command=~/.config/i3blocks/scripts/load
-#interval=5
-#signal=5
-#
+[load]
+# Left click: show 1m/5m/15m averages
+command=~/.config/i3blocks/scripts/load
+interval=5
+signal=5
+
 #[temp]
 ## Left click: show per-sensor breakdown
 #command=~/.config/i3blocks/scripts/temp

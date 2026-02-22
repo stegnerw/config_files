@@ -31,21 +31,12 @@ threshold_color() {
   local yellow="#ebcb8b"
   local red="#bf616a"
 
-  if [ -n "$invert" ]; then
-    if [ "$value" -le "$crit" ]; then
-      echo "$red"
-    elif [ "$value" -le "$warn" ]; then
-      echo "$yellow"
-    else
-      echo "$green"
-    fi
-  else
-    if [ "$value" -ge "$crit" ]; then
-      echo "$red"
-    elif [ "$value" -ge "$warn" ]; then
-      echo "$yellow"
-    else
-      echo "$green"
-    fi
-  fi
+  awk -v val="$value" -v warn="$warn" -v crit="$crit" \
+    -v inv="$invert" -v g="$green" -v y="$yellow" -v r="$red" \
+    'BEGIN {
+        s = (inv != "") ? -1 : 1
+        if (s * val >= s * crit) print r
+        else if (s * val >= s * warn) print y
+        else print g
+    }'
 }
