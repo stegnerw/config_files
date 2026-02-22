@@ -1,8 +1,15 @@
 #!/bin/bash
 source "$(dirname "$0")/helper.sh"
 
-read -r load1 load5 load15 _ < /proc/loadavg
+# --- Environment Variables ---
+
 nproc=$(nproc)
+LOAD_WARN="${LOAD_WARN:-$nproc}"
+LOAD_CRIT="${LOAD_CRIT:-$(( nproc * 2 ))}"
+
+# --- Core Logic ---
+
+read -r load1 load5 load15 _ < /proc/loadavg
 
 # Click: show full load breakdown
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
@@ -16,7 +23,7 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
     "Load: ${load_string}\nCPU: ${cpu_usage}%\nCores: ${nproc}"
 fi
 
-color=$(threshold_color "$load1" "$nproc" "$(( nproc * 2 ))")
+color=$(threshold_color "$load1" "$LOAD_WARN" "$LOAD_CRIT")
 echo " ${load1}"
 echo ""
 echo "$color"

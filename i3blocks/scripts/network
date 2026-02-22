@@ -1,6 +1,11 @@
 #!/bin/bash
 source "$(dirname "$0")/helper.sh"
 
+# --- Environment Variables ---
+
+SIGNAL_WARN="${SIGNAL_WARN:-50}"
+SIGNAL_CRIT="${SIGNAL_CRIT:-30}"
+
 # --- Core Logic ---
 
 # Gather connection info. Prefer ethernet over wifi.
@@ -29,7 +34,7 @@ case "$iface" in
     body="$body\nSignal: ${signal:-?}"
     body="\nFreq: ${freq:-unknown}"
     icon="󰖩"
-    color=$(threshold_color "${signal:-0}" 50 30 invert)
+    color=$(threshold_color "${signal:-0}" "$SIGNAL_WARN" "$SIGNAL_CRIT" invert)
     ;;
   *)
     body="No active connection"
@@ -37,8 +42,6 @@ case "$iface" in
     color=$(threshold_color 1 0 0) # always red
     ;;
 esac
-
-# --- Main ---
 
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
   notify "$title" "$body"

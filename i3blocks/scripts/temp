@@ -3,8 +3,10 @@ source "$(dirname "$0")/helper.sh"
 
 # --- Environment Variables ---
 
-T_WARN="${T_WARN:-65}"
-T_CRIT="${T_CRIT:-80}"
+TEMP_WARN="${TEMP_WARN:-65}"
+TEMP_CRIT="${TEMP_CRIT:-80}"
+
+# --- Core Logic ---
 
 # Find the highest temp across thermal zones.
 # Prefer coretemp/k10temp hwmon entries if available, fall back to
@@ -47,7 +49,7 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
     notify "Temperatures" "${sensor_details:-No sensors found}"
 fi
 
-color=$(threshold_color "$max_temp" "$T_WARN" "$T_CRIT")
+color=$(threshold_color "$max_temp" "$TEMP_WARN" "$TEMP_CRIT")
 crit_color="$(threshold_color 1 0 0)"  # always red
 warn_color="$(threshold_color 1 0 2)"  # always yellow
 if [ "$color" = "$crit_color" ]; then
