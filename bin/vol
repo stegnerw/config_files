@@ -1,0 +1,30 @@
+#!/bin/bash
+# Volume control wrapper for PipeWire/PulseAudio.
+# Usage: vol up|down|mute [step]
+
+readonly action="${1:?Usage: vol up|down|mute [step]}"
+readonly step="${2:-5}"
+readonly sink="@DEFAULT_SINK@"
+
+case "$action" in
+    up)
+        vol=$(pactl get-sink-volume "$sink" 2>/dev/null |
+            grep -oP '\d+%' | head -1 | tr -d '%')
+        new_vol=$(( vol + step ))
+        new_vol=$(( new_vol > 100 ? 100 : new_vol ))
+        pactl set-sink-volume "$sink" "${new_vol}%"
+        ;;
+    down)
+        pactl set-sink-volume "$sink" "-${step}%"
+        ;;
+    mute)
+        pactl set-sink-mute "$sink" toggle
+        ;;
+    *)
+        echo "Usage: vol up|down|mute [step]" >&2
+        exit 1
+        ;;
+esac
+
+# Signal i3blocks to redraw the volume block
+pkill -RTMIN+1 i3blocks 2>/dev/null

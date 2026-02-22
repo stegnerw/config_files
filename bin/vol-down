@@ -1,7 +1,0 @@
-#!/bin/bash
-# Usage: vol-down [delta]
-delta=${1:-5}
-pactl set-sink-volume @DEFAULT_SINK@ -${delta}%
-
-# Signal i3blocks to redraw volume block
-pkill -RTMIN+1 i3blocks
