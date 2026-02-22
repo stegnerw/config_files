@@ -74,14 +74,13 @@ case "$BLOCK_BUTTON" in
       [ "$secs_left" -lt 0 ] && secs_left=0
       mins=$(( secs_left / 60 ))
       secs=$(( secs_left % 60 ))
-      notify-send -t 5000 -a "i3blocks" "Pomodoro" \
-        "$(printf "%s: %d:%02d remaining" "$pomo_phase" "$mins" "$secs")"
+      notify "Pomodoro" "$(printf "%s: %d:%02d remaining" \
+        "$pomo_phase" "$mins" "$secs")"
     elif [ "$pomo_state" = "paused" ]; then
       mins=$(( pomo_remaining / 60 ))
       secs=$(( pomo_remaining % 60 ))
-      notify-send -t 5000 -a "i3blocks" "Pomodoro" \
-        "$(printf "%s (paused): %d:%02d remaining" \
-          "$pomo_phase" "$mins" "$secs")"
+      notify "Pomodoro" "$(printf "%s (paused): %d:%02d remaining" \
+        "$pomo_phase" "$mins" "$secs")"
     fi
     ;;
   3)

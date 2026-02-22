@@ -10,6 +10,18 @@ export COLOR_WHITE="#ffffff"
 export COLOR_LGRAY="#a0a0a0"
 export COLOR_DGRAY="#808080"
 
+# Send a notification with consistent formatting.
+# Usage: notify "Title" "Body"
+notify() {
+  local title="$1"
+  local body="$2"
+  # -r requires numeric ID for replacement; hash the block name
+  local replace_id
+  replace_id=$(( $(echo "${BLOCK_NAME:-i3blocks}" |
+    cksum | awk '{print $1}') % 2147483647 ))
+  notify-send -t 5000 -r "$replace_id" -a "i3blocks" "$title" "$body"
+}
+
 # Pop up a terminal pager with information
 # Usage: show_popup "Title" "Body"
 show_popup() {
