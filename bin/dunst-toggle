@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+dunstctl set-paused toggle
+
+# Signal i3blocks to redraw the dunst block
+pkill -RTMIN+2 i3blocks 2>/dev/null

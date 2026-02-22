@@ -1,0 +1,15 @@
+#!/bin/bash
+source "$(dirname "$0")/helpers.sh"
+
+# Left click: toggle notification state
+if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+  dunst-toggle
+fi
+
+if [ "$(dunstctl is-paused)" = true ]; then
+  echo "󰂛"
+  echo "󰂛"
+  echo "#808080"
+else
+  echo "󰂚"
+fi

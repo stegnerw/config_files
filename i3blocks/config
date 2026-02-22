@@ -16,12 +16,12 @@ command=~/.config/i3blocks/scripts/volume
 interval=1
 signal=1
 
-#[dunst]
-## Left click: toggle notifications
-#command=~/.config/i3blocks/scripts/dunst
-#interval=1
-#signal=2
-#
+[dunst]
+# Left click: toggle notifications
+command=~/.config/i3blocks/scripts/dunst
+interval=1
+signal=2
+
 #[network]
 ## Left click: show full connection details
 #command=~/.config/i3blocks/scripts/network
