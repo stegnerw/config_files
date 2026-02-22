@@ -15,28 +15,28 @@ mount_point="${BLOCK_INSTANCE:-/}"
 read -r _ total used avail pct_raw _ < <(df -B1K "$mount_point" | tail -1)
 pct="${pct_raw%\%}"
 
-# Human-readable (auto-scale units)
-format_size() {
-    local kb="$1"
-    if [ "$kb" -ge 1073741824 ]; then
-        echo "$(echo "scale=1; $kb / 1073741824" | bc) TiB"
-    elif [ "$kb" -ge 1048576 ]; then
-        echo "$(echo "scale=1; $kb / 1048576" | bc) GiB"
-    else
-        echo "$(echo "scale=0; $kb / 1024" | bc) MiB"
-    fi
-}
-used_hr=$(format_size "$used")
-total_hr=$(format_size "$total")
-avail_hr=$(format_size "$avail")
-
 # Click: show full details
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-    notify "Mount point: $mount_point" \
-        "Used: ${used_hr} / ${total_hr} (${pct}%)\nAvail: ${avail_hr}"
+  # Human-readable (auto-scale units)
+  format_size() {
+    local kb="$1"
+    if [ "$kb" -ge 1073741824 ]; then
+      echo "$(echo "scale=1; $kb / 1073741824" | bc) TiB"
+    elif [ "$kb" -ge 1048576 ]; then
+      echo "$(echo "scale=1; $kb / 1048576" | bc) GiB"
+    else
+      echo "$(echo "scale=0; $kb / 1024" | bc) MiB"
+    fi
+  }
+  used_hr=$(format_size "$used")
+  total_hr=$(format_size "$total")
+  avail_hr=$(format_size "$avail")
+
+  notify "Mount point: $mount_point" \
+    "Used: ${used_hr} / ${total_hr} (${pct}%)\nAvail: ${avail_hr}"
 fi
 
-color=$(threshold_color "$pct" 75 90)
+color=$(threshold_color "$pct" "$DISK_WARN" "$DISK_CRIT")
 echo "$DISK_ICON ${pct}%"
 echo "$DISK_ICON"
 echo "$color"

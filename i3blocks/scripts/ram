@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source "$(dirname "$0")/helper.bash"
 
-# --- Environment Variables
+# --- Environment Variables ---
 
 RAM_WARN=${RAM_WARN:-60}
 RAM_CRIT=${RAM_CRIT:-85}
@@ -15,14 +15,14 @@ eval "$(awk '/^MemTotal:/ {print "mem_total=" $2}
 mem_used=$(( mem_total - mem_avail ))
 pct=$(( mem_used * 100 / mem_total ))
 
-# Human-readable values
-used_gib=$(echo "scale=1; $mem_used / 1048576" | bc)
-total_gib=$(echo "scale=1; $mem_total / 1048576" | bc)
-
 # Click: show used/total
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-    notify "Memory" \
-        "Used: ${used_gib} GiB / ${total_gib} GiB (${pct}%)"
+  # Human-readable values
+  used_gib=$(echo "scale=1; $mem_used / 1048576" | bc)
+  total_gib=$(echo "scale=1; $mem_total / 1048576" | bc)
+
+  notify "Memory" \
+    "Used: ${used_gib} GiB / ${total_gib} GiB (${pct}%)"
 fi
 
 color=$(threshold_color "$pct" "$RAM_WARN" "$RAM_CRIT")

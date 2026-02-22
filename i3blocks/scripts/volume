@@ -3,19 +3,10 @@ source "$(dirname "$0")/helper.bash"
 
 # --- Environment Variables ---
 
-# Printing and styling
-AUDIO_HIGH_SYMBOL=${AUDIO_HIGH_SYMBOL:-' '}
-AUDIO_MED_SYMBOL=${AUDIO_MED_SYMBOL:-' '}
-AUDIO_LOW_SYMBOL=${AUDIO_LOW_SYMBOL:-' '}
-AUDIO_MUTED_SYMBOL=${AUDIO_MUTED_SYMBOL:-' '}
-DEFAULT_COLOR=${DEFAULT_COLOR:-"#ffffff"}
-MUTED_COLOR=${MUTED_COLOR:-"#a0a0a0"}
-
-# Percentage thresholds and step
 AUDIO_MED_THRESH=${AUDIO_MED_THRESH:-50}
 AUDIO_LOW_THRESH=${AUDIO_LOW_THRESH:-0}
 
-# --- Main ---
+# --- Core Logic ---
 
 query_vol() {
   pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null |
@@ -46,15 +37,15 @@ if [[ -z "$vol" ]] ; then
 fi
 
 if [[ $muted =~ "no" ]] ; then
-  SYMB=$AUDIO_HIGH_SYMBOL
-  [[ $vol -le $AUDIO_MED_THRESH ]] && SYMB=$AUDIO_MED_SYMBOL
-  [[ $vol -le $AUDIO_LOW_THRESH ]] && SYMB=$AUDIO_LOW_SYMBOL
-  COLOR=$DEFAULT_COLOR
+  icon=""
+  [[ $vol -le $AUDIO_MED_THRESH ]] && icon=""
+  [[ $vol -le $AUDIO_LOW_THRESH ]] && icon=""
+  color="#ffffff"
 else
-  SYMB=$AUDIO_MUTED_SYMBOL
-  COLOR=$MUTED_COLOR
+  icon=""
+  color="#a0a0a0"
 fi
 
-echo "${SYMB}$(printf '%3d' "$vol")%"
-echo "${SYMB}$(printf '%3d' "$vol")%"
-echo "$COLOR"
+echo "${icon} $(printf '%3d' "$vol")%"
+echo "${icon}"
+echo "$color"

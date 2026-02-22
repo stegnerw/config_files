@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Shared helpers for i3blocks scripts.
 # Source this at the top of each block script:
-#   source "$(dirname "$0")/helper.sh"
+#   source "$(dirname "$0")/helper.bash"
 
 # Send a dunst notification with consistent formatting.
 # Usage: notify "Title" "Body"

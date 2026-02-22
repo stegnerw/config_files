@@ -16,37 +16,37 @@ sensor_details=""
 
 # Try hwmon sensors first (more granular)
 for hwmon in /sys/class/hwmon/hwmon*; do
-    name=$(cat "${hwmon}/name" 2>/dev/null)
-    for input in "${hwmon}"/temp*_input; do
-        [ -f "$input" ] || continue
-        temp_mc=$(cat "$input" 2>/dev/null || echo 0)
-        temp_c=$(( temp_mc / 1000 ))
-        label_file="${input%_input}_label"
-        label=$(cat "$label_file" 2>/dev/null || basename "$input" | sed 's/_input//')
-        sensor_details="${sensor_details}${name}/${label}: ${temp_c}°C\n"
-        if [ "$temp_c" -gt "$max_temp" ]; then
-            max_temp="$temp_c"
-        fi
-    done
+  name=$(cat "${hwmon}/name" 2>/dev/null)
+  for input in "${hwmon}"/temp*_input; do
+    [ -f "$input" ] || continue
+    temp_mc=$(cat "$input" 2>/dev/null || echo 0)
+    temp_c=$(( temp_mc / 1000 ))
+    label_file="${input%_input}_label"
+    label=$(cat "$label_file" 2>/dev/null || basename "$input" | sed 's/_input//')
+    sensor_details="${sensor_details}${name}/${label}: ${temp_c}°C\n"
+    if [ "$temp_c" -gt "$max_temp" ]; then
+      max_temp="$temp_c"
+    fi
+  done
 done
 
 # Fallback: thermal zones
 if [ "$max_temp" -eq 0 ]; then
-    for zone in /sys/class/thermal/thermal_zone*; do
-        [ -f "${zone}/temp" ] || continue
-        temp_mc=$(cat "${zone}/temp" 2>/dev/null || echo 0)
-        temp_c=$(( temp_mc / 1000 ))
-        zone_type=$(cat "${zone}/type" 2>/dev/null || basename "$zone")
-        sensor_details="${sensor_details}${zone_type}: ${temp_c}°C\n"
-        if [ "$temp_c" -gt "$max_temp" ]; then
-            max_temp="$temp_c"
-        fi
-    done
+  for zone in /sys/class/thermal/thermal_zone*; do
+    [ -f "${zone}/temp" ] || continue
+    temp_mc=$(cat "${zone}/temp" 2>/dev/null || echo 0)
+    temp_c=$(( temp_mc / 1000 ))
+    zone_type=$(cat "${zone}/type" 2>/dev/null || basename "$zone")
+    sensor_details="${sensor_details}${zone_type}: ${temp_c}°C\n"
+    if [ "$temp_c" -gt "$max_temp" ]; then
+      max_temp="$temp_c"
+    fi
+  done
 fi
 
 # Click: show per-sensor breakdown
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-    notify "Temperatures" "${sensor_details:-No sensors found}"
+  notify "Temperatures" "${sensor_details:-No sensors found}"
 fi
 
 color=$(threshold_color "$max_temp" "$TEMP_WARN" "$TEMP_CRIT")
