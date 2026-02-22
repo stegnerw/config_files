@@ -1,0 +1,62 @@
+#!/bin/bash
+# Displays the default device, volume, and mute status for i3blocks
+# Modified from i3blocks-contrib/volume-pipewire:
+# https://github.com/vivien/i3blocks-contrib/tree/master/volume-pipewire
+
+# --- Environment Variables ---
+
+# Printing and styling
+AUDIO_HIGH_SYMBOL=${AUDIO_HIGH_SYMBOL:-' '}
+AUDIO_MED_SYMBOL=${AUDIO_MED_SYMBOL:-' '}
+AUDIO_LOW_SYMBOL=${AUDIO_LOW_SYMBOL:-' '}
+AUDIO_MUTED_SYMBOL=${AUDIO_MUTED_SYMBOL:-' '}
+DEFAULT_COLOR=${DEFAULT_COLOR:-"#ffffff"}
+MUTED_COLOR=${MUTED_COLOR:-"#a0a0a0"}
+
+# Percentage thresholds and step
+AUDIO_MED_THRESH=${AUDIO_MED_THRESH:-50}
+AUDIO_LOW_THRESH=${AUDIO_LOW_THRESH:-0}
+
+# --- Main ---
+
+query_vol() {
+  pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null |
+    grep -oP '\d+%' |
+    head -1 |
+    tr -d '%'
+}
+
+query_mute() {
+  pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | grep -oP 'yes|no'
+}
+
+case "$BLOCK_BUTTON" in
+  1) pavucontrol & ;;
+  3) vol mute ;;
+  4) vol up ;;
+  5) vol down ;;
+esac
+
+vol=$(query_vol)
+muted=$(query_mute)
+
+if [[ -z "$vol" ]] ; then
+  echo "Sound inactive"
+  echo ""
+  echo "#808080"
+  exit 0
+fi
+
+if [[ $muted =~ "no" ]] ; then
+  SYMB=$AUDIO_HIGH_SYMBOL
+  [[ $vol -le $AUDIO_MED_THRESH ]] && SYMB=$AUDIO_MED_SYMBOL
+  [[ $vol -le $AUDIO_LOW_THRESH ]] && SYMB=$AUDIO_LOW_SYMBOL
+  COLOR=$DEFAULT_COLOR
+else
+  SYMB=$AUDIO_MUTED_SYMBOL
+  COLOR=$MUTED_COLOR
+fi
+
+echo "${SYMB}$(printf '%3d' "$vol")%"
+echo "${SYMB}$(printf '%3d' "$vol")%"
+echo "$COLOR"

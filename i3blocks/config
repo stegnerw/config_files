@@ -1,0 +1,64 @@
+# i3blocks configuration
+# https://github.com/vivien/i3blocks
+#
+# Block scripts live in ~/.config/i3blocks/scripts/
+# Click any block to get full details via dunst notification.
+# Signal a block to force refresh: pkill -RTMIN+<signal> i3blocks
+
+[global]
+separator=true
+separator_block_width=15
+markup=pango
+
+[volume]
+# Left click: mixer | Right click: mute | Scroll: volume
+command=~/.config/i3blocks/scripts/volume
+interval=1
+signal=1
+
+#[dunst]
+## Left click: toggle notifications
+#command=~/.config/i3blocks/scripts/dunst
+#interval=1
+#signal=2
+#
+#[network]
+## Left click: show full connection details
+#command=~/.config/i3blocks/scripts/network
+#interval=10
+#signal=3
+#
+#[battery]
+## Left click: show detailed battery info
+## Outputs nothing on desktops (no separator rendered)
+#command=~/.config/i3blocks/scripts/battery
+#interval=30
+#signal=4
+#
+#[load]
+## Left click: show 1m/5m/15m averages
+#command=~/.config/i3blocks/scripts/load
+#interval=5
+#signal=5
+#
+#[temp]
+## Left click: show per-sensor breakdown
+#command=~/.config/i3blocks/scripts/temp
+#interval=5
+#signal=6
+#
+#[ram]
+## Left click: show used/total
+#command=~/.config/i3blocks/scripts/ram
+#interval=5
+#signal=7
+#
+#[disk]
+## Left click: show used/total
+#command=~/.config/i3blocks/scripts/disk
+#interval=60
+#signal=8
+
+[datetime]
+command=date '+%Y-%m-%d %H:%M:%S'
+interval=1
