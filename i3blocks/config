@@ -53,11 +53,12 @@ command=~/.config/i3blocks/scripts/ram
 interval=5
 signal=7
 
-#[disk]
-## Left click: show used/total
-#command=~/.config/i3blocks/scripts/disk
-#interval=60
-#signal=8
+[disk]
+# Left click: show used/total
+instance=/
+command=~/.config/i3blocks/scripts/disk
+interval=60
+signal=8
 
 [datetime]
 command=date '+%Y-%m-%d %H:%M:%S'
