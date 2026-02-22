@@ -41,12 +41,12 @@ command=~/.config/i3blocks/scripts/load
 interval=5
 signal=5
 
-#[temp]
-## Left click: show per-sensor breakdown
-#command=~/.config/i3blocks/scripts/temp
-#interval=5
-#signal=6
-#
+[temp]
+# Left click: show per-sensor breakdown
+command=~/.config/i3blocks/scripts/temp
+interval=5
+signal=6
+
 #[ram]
 ## Left click: show used/total
 #command=~/.config/i3blocks/scripts/ram

@@ -1,0 +1,65 @@
+#!/bin/bash
+source "$(dirname "$0")/helper.sh"
+
+# --- Environment Variables ---
+
+T_WARN="${T_WARN:-65}"
+T_CRIT="${T_CRIT:-80}"
+
+# Find the highest temp across thermal zones.
+# Prefer coretemp/k10temp hwmon entries if available, fall back to
+# thermal_zone readings.
+max_temp=0
+sensor_details=""
+
+# Try hwmon sensors first (more granular)
+for hwmon in /sys/class/hwmon/hwmon*; do
+    name=$(cat "${hwmon}/name" 2>/dev/null)
+    for input in "${hwmon}"/temp*_input; do
+        [ -f "$input" ] || continue
+        temp_mc=$(cat "$input" 2>/dev/null || echo 0)
+        temp_c=$(( temp_mc / 1000 ))
+        label_file="${input%_input}_label"
+        label=$(cat "$label_file" 2>/dev/null || basename "$input" | sed 's/_input//')
+        sensor_details="${sensor_details}${name}/${label}: ${temp_c}°C\n"
+        if [ "$temp_c" -gt "$max_temp" ]; then
+            max_temp="$temp_c"
+        fi
+    done
+done
+
+# Fallback: thermal zones
+if [ "$max_temp" -eq 0 ]; then
+    for zone in /sys/class/thermal/thermal_zone*; do
+        [ -f "${zone}/temp" ] || continue
+        temp_mc=$(cat "${zone}/temp" 2>/dev/null || echo 0)
+        temp_c=$(( temp_mc / 1000 ))
+        zone_type=$(cat "${zone}/type" 2>/dev/null || basename "$zone")
+        sensor_details="${sensor_details}${zone_type}: ${temp_c}°C\n"
+        if [ "$temp_c" -gt "$max_temp" ]; then
+            max_temp="$temp_c"
+        fi
+    done
+fi
+
+# Click: show per-sensor breakdown
+if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+    notify "Temperatures" "${sensor_details:-No sensors found}"
+fi
+
+color=$(threshold_color "$max_temp" "$T_WARN" "$T_CRIT")
+crit_color="$(threshold_color 1 0 0)"  # always red
+warn_color="$(threshold_color 1 0 2)"  # always yellow
+if [ "$color" = "$crit_color" ]; then
+  icon=""
+elif [ "$color" = "$warn_color" ]; then
+  icon=""
+else
+  icon=""
+fi
+echo "$icon ${max_temp}°C"
+echo ""
+echo "$color"
+
+# Set urgent flag if over crit threshold
+[ "$color" = "$crit_color" ] && exit 33
