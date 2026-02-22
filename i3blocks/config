@@ -28,10 +28,10 @@ command=~/.config/i3blocks/scripts/network
 interval=10
 signal=3
 
-[battery]
+[bat]
 # Left click: show detailed battery info
 # Outputs nothing on desktops (no separator rendered)
-command=~/.config/i3blocks/scripts/battery
+command=~/.config/i3blocks/scripts/bat
 interval=30
 signal=4
 
