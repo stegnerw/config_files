@@ -1,6 +1,8 @@
 #!/bin/bash
 source "$(dirname "$0")/helper.sh"
 
+# --- Core Logic ---
+
 # Gather connection info. Prefer ethernet over wifi.
 iface=$(ip route show default | awk '{print $5; exit}')
 

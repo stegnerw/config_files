@@ -1,0 +1,62 @@
+#!/bin/bash
+source "$(dirname "$0")/helper.sh"
+
+# --- Environment Variables ---
+
+BAT_PATH="/sys/class/power_supply/BAT0"
+
+# --- Core Logic ---
+
+# No battery? Output nothing. i3blocks suppresses the block + separator.
+[ -d "$BAT_PATH" ] || exit 0
+
+capacity=$(cat "${BAT_PATH}/capacity" 2>/dev/null || echo 0)
+status=$(cat "${BAT_PATH}/status" 2>/dev/null || echo "Unknown")
+
+# Estimate remaining time from power_now and energy_now if available
+remaining=""
+energy_now=$(cat "${bat_path}/energy_now" 2>/dev/null)
+power_now=$(cat "${bat_path}/power_now" 2>/dev/null)
+if [ -n "$energy_now" ] && [ -n "$power_now" ] && [ "$power_now" -gt 0 ]; then
+    hours=$(( energy_now / power_now ))
+    mins=$(( (energy_now % power_now) * 60 / power_now ))
+    remaining=$(printf "%d:%02d" "$hours" "$mins")
+fi
+
+# Click: show full details
+if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+    notify "Battery" \
+        "Status: ${status}\nCapacity: ${capacity}%\nRemaining: ${remaining:-unknown}"
+fi
+
+battery_icon() {
+  local capacity="$1"
+  case $(( (capacity + 5) / 10 )) in
+    0)  echo "󰂎" ;;
+    1)  echo "󰁺" ;;
+    2)  echo "󰁻" ;;
+    3)  echo "󰁼" ;;
+    4)  echo "󰁽" ;;
+    5)  echo "󰁾" ;;
+    6)  echo "󰁿" ;;
+    7)  echo "󰂀" ;;
+    8)  echo "󰂁" ;;
+    9)  echo "󰂂" ;;
+    10) echo "󰁹" ;;
+  esac
+}
+
+# --- Main ---
+
+# Icon based on status
+case "$status" in
+    Charging)    icon="󰂄" ;;
+    Full)        icon="󱟢" ;;
+    Discharging) icon="$(battery_icon "$capacity")" ;;
+    *)           icon="󰂃" ;;
+esac
+
+color=$(threshold_color "$capacity" 50 25 invert)
+echo "${icon} ${capacity}%"
+echo ""
+echo "$color"

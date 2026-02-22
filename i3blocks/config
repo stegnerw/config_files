@@ -28,13 +28,13 @@ command=~/.config/i3blocks/scripts/network
 interval=10
 signal=3
 
-#[battery]
-## Left click: show detailed battery info
-## Outputs nothing on desktops (no separator rendered)
-#command=~/.config/i3blocks/scripts/battery
-#interval=30
-#signal=4
-#
+[battery]
+# Left click: show detailed battery info
+# Outputs nothing on desktops (no separator rendered)
+command=~/.config/i3blocks/scripts/battery
+interval=30
+signal=4
+
 #[load]
 ## Left click: show 1m/5m/15m averages
 #command=~/.config/i3blocks/scripts/load
