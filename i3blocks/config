@@ -38,23 +38,19 @@ signal=4
 [load]
 # Left click: show 1m/5m/15m averages
 interval=5
-signal=5
 
 [temp]
 # Left click: show per-sensor breakdown
 interval=5
-signal=6
 
 [ram]
 # Left click: show used/total
 interval=5
-signal=7
 
 [disk]
 # Left click: show used/total
 instance=/
 interval=60
-signal=8
 
 [datetime]
 command=date '+%Y-%m-%d %H:%M:%S'
