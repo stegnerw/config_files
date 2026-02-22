@@ -28,7 +28,7 @@ if command -v arch-audit &>/dev/null && [ "$update_count" -gt 0 ]; then
 fi
 
 # Click: show package list with security details
-if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+if [ "$BLOCK_BUTTON" -eq 2 ] 2>/dev/null; then
   if [ "$update_count" -eq 0 ]; then
     show_popup "Updates" "System is up to date"
   else

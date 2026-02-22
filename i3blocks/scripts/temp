@@ -45,7 +45,7 @@ if [ "$max_temp" -eq 0 ]; then
 fi
 
 # Click: show per-sensor breakdown
-if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+if [ "$BLOCK_BUTTON" -eq 2 ] 2>/dev/null; then
   show_popup "Temperatures" "${sensor_details:-No sensors found}"
 fi
 

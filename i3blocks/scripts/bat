@@ -26,7 +26,7 @@ if [ -n "$energy_now" ] && [ -n "$power_now" ] && [ "$power_now" -gt 0 ]; then
 fi
 
 # Click: show full details
-if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+if [ "$BLOCK_BUTTON" -eq 2 ] 2>/dev/null; then
   show_popup "Battery" \
     "Status: ${status}\nCapacity: ${capacity}%\nRemaining: ${remaining:-unknown}"
 fi

@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/helper.bash"
+
+# --- Environment Variables ---
+
+POMO_WORK="${POMO_WORK:-25}"
+POMO_BREAK="${POMO_BREAK:-5}"
+
+# --- Core Logic ---
+
+STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/i3blocks_pomodoro"
+
+# State file format: state|phase|end_epoch|remaining_secs
+# state: idle, running, paused
+# phase: work, break
+# end_epoch: when the timer expires (running only)
+# remaining_secs: seconds left when paused
+
+read_state() {
+  if [ -f "$STATE_FILE" ]; then
+    IFS='|' read -r pomo_state pomo_phase pomo_end pomo_remaining \
+      < "$STATE_FILE"
+  else
+    pomo_state="idle"
+    pomo_phase="work"
+    pomo_end=0
+    pomo_remaining=0
+  fi
+}
+
+write_state() {
+  echo "${pomo_state}|${pomo_phase}|${pomo_end}|${pomo_remaining}" \
+    > "$STATE_FILE"
+}
+
+icon_full=""
+icon_half=""
+icon_empty=""
+icon_idle=""
+
+read_state
+
+now=$(date +%s)
+
+# Click handling
+case "$BLOCK_BUTTON" in
+  1)
+    # Left click: start / pause / resume
+    case "$pomo_state" in
+      idle)
+        pomo_state="running"
+        pomo_phase="work"
+        pomo_end=$(( now + POMO_WORK * 60 ))
+        pomo_remaining=0
+        ;;
+      running)
+        pomo_state="paused"
+        pomo_remaining=$(( pomo_end - now ))
+        [ "$pomo_remaining" -lt 0 ] && pomo_remaining=0
+        pomo_end=0
+        ;;
+      paused)
+        pomo_state="running"
+        pomo_end=$(( now + pomo_remaining ))
+        pomo_remaining=0
+        ;;
+    esac
+    write_state
+    ;;
+  2)
+    # Middle click: peek remaining time
+    if [ "$pomo_state" = "running" ]; then
+      secs_left=$(( pomo_end - now ))
+      [ "$secs_left" -lt 0 ] && secs_left=0
+      mins=$(( secs_left / 60 ))
+      secs=$(( secs_left % 60 ))
+      notify-send -t 5000 -a "i3blocks" "Pomodoro" \
+        "$(printf "%s: %d:%02d remaining" "$pomo_phase" "$mins" "$secs")"
+    elif [ "$pomo_state" = "paused" ]; then
+      mins=$(( pomo_remaining / 60 ))
+      secs=$(( pomo_remaining % 60 ))
+      notify-send -t 5000 -a "i3blocks" "Pomodoro" \
+        "$(printf "%s (paused): %d:%02d remaining" \
+          "$pomo_phase" "$mins" "$secs")"
+    fi
+    ;;
+  3)
+    # Right click: skip phase (running) / reset (paused)
+    case "$pomo_state" in
+      running)
+        if [ "$pomo_phase" = "work" ]; then
+          pomo_phase="break"
+          pomo_end=$(( now + POMO_BREAK * 60 ))
+        else
+          pomo_phase="work"
+          pomo_end=$(( now + POMO_WORK * 60 ))
+        fi
+        ;;
+      paused)
+        pomo_state="idle"
+        pomo_phase="work"
+        pomo_end=0
+        pomo_remaining=0
+        ;;
+    esac
+    write_state
+    ;;
+esac
+
+# Check timer is expired
+if [ "$pomo_state" = "running" ] && [ "$now" -ge "$pomo_end" ]; then
+  if [ "$pomo_phase" = "work" ]; then
+    notify-send -t 10000 -a "i3blocks" "Pomodoro" "Break time!"
+    paplay /usr/share/sounds/freedesktop/stereo/complete.oga &
+    pomo_phase="break"
+    pomo_end=$(( now + POMO_BREAK * 60 ))
+  else
+    notify-send -t 10000 -a "i3blocks" "Pomodoro" "Back to work!"
+    paplay /usr/share/sounds/freedesktop/stereo/dialog-information.oga &
+    pomo_phase="work"
+    pomo_end=$(( now + POMO_WORK * 60 ))
+  fi
+  write_state
+fi
+
+# Output result
+case "$pomo_state" in
+  idle)
+    echo "$icon_idle idle"
+    echo "$icon_idle"
+    echo "$COLOR_LGRAY"
+    ;;
+  running)
+    secs_left=$(( pomo_end - now ))
+    [ "$secs_left" -lt 0 ] && secs_left=0
+
+    if [ "$pomo_phase" = "work" ]; then
+      total=$(( POMO_WORK * 60 ))
+      color="$COLOR_WHITE"
+    else
+      total=$(( POMO_BREAK * 60 ))
+      color="$COLOR_GREEN"
+    fi
+
+    half=$(( total / 2 ))
+    if [ "$secs_left" -gt "$half" ]; then
+      icon="$icon_full"
+    elif [ "$secs_left" -gt 0 ]; then
+      icon="$icon_half"
+    else
+      icon="$icon_empty"
+    fi
+
+    echo "$icon $pomo_phase"
+    echo "$icon"
+    echo "$color"
+    ;;
+  paused)
+    if [ "$pomo_remaining" -gt 0 ]; then
+      if [ "$pomo_phase" = "work" ]; then
+        total=$(( POMO_WORK * 60 ))
+      else
+        total=$(( POMO_BREAK * 60 ))
+      fi
+      half=$(( total / 2 ))
+      if [ "$pomo_remaining" -gt "$half" ]; then
+        icon="$icon_full"
+      else
+        icon="$icon_half"
+      fi
+    else
+      icon="$icon_full"
+    fi
+
+    echo "$icon paused"
+    echo "$icon"
+    echo "$COLOR_YELLOW"
+    ;;
+esac

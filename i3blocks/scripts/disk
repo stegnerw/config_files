@@ -16,7 +16,7 @@ read -r _ total used avail pct_raw _ < <(df -B1K "$mount_point" | tail -1)
 pct="${pct_raw%\%}"
 
 # Click: show full details
-if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+if [ "$BLOCK_BUTTON" -eq 2 ] 2>/dev/null; then
   # Human-readable (auto-scale units)
   format_size() {
     local kb="$1"

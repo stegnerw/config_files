@@ -6,13 +6,11 @@
 # Signal a block to force refresh: pkill -RTMIN+<signal> i3blocks
 
 # [global]
+# Most blocks support middle-click for more info
 separator=true
 separator_block_width=15
 markup=pango
 command=$HOME/.config/i3blocks/scripts/$BLOCK_NAME
-
-[updates]
-interval=300
 
 [volume]
 # Left click: mixer | Right click: mute | Scroll: volume
@@ -24,31 +22,31 @@ signal=1
 interval=1
 signal=2
 
+[pomodoro]
+interval=1
+signal=5
+
+[updates]
+interval=300
+
 [network]
-# Left click: show full connection details
 interval=10
 signal=3
 
 [bat]
-# Left click: show detailed battery info
-# Outputs nothing on desktops (no separator rendered)
 interval=30
 signal=4
 
 [load]
-# Left click: show 1m/5m/15m averages
 interval=5
 
 [temp]
-# Left click: show per-sensor breakdown
 interval=5
 
 [ram]
-# Left click: show used/total
 interval=5
 
 [disk]
-# Left click: show used/total
 instance=/
 interval=60
 

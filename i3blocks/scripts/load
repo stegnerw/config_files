@@ -12,7 +12,7 @@ LOAD_CRIT="${LOAD_CRIT:-$(( nproc * 2 ))}"
 read -r load1 load5 load15 _ < /proc/loadavg
 
 # Click: show full load breakdown
-if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+if [ "$BLOCK_BUTTON" -eq 2 ] 2>/dev/null; then
   load_string="${load1} / ${load5} / ${load15} (1m / 5m / 15m)"
   cpu_usage=$(awk '/^cpu / {
     total = 0; idle = $5;
