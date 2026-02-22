@@ -3,7 +3,7 @@ source "$(dirname "$0")/helpers.sh"
 
 # Left click: toggle notification state
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-  dunst-toggle
+  notif-toggle
 fi
 
 if [ "$(dunstctl is-paused)" = true ]; then

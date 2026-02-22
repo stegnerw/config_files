@@ -16,9 +16,9 @@ command=~/.config/i3blocks/scripts/volume
 interval=1
 signal=1
 
-[dunst]
+[notif]
 # Left click: toggle notifications
-command=~/.config/i3blocks/scripts/dunst
+command=~/.config/i3blocks/scripts/notif
 interval=1
 signal=2
 
