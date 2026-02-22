@@ -32,7 +32,7 @@ muted=$(query_mute)
 if [[ -z "$vol" ]] ; then
   echo "Sound inactive"
   echo ""
-  echo "#808080"
+  echo "$COLOR_DGRAY"
   exit 0
 fi
 
@@ -40,10 +40,10 @@ if [[ $muted =~ "no" ]] ; then
   icon=""
   [[ $vol -le $AUDIO_MED_THRESH ]] && icon=""
   [[ $vol -le $AUDIO_LOW_THRESH ]] && icon=""
-  color="#ffffff"
+  color="$COLOR_WHITE"
 else
   icon=""
-  color="#a0a0a0"
+  color="$COLOR_LGRAY"
 fi
 
 echo "${icon} $(printf '%3d' "$vol")%"

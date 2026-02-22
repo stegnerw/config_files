@@ -11,7 +11,9 @@ fi
 if [ "$(dunstctl is-paused)" = true ]; then
   echo "󰂛"
   echo "󰂛"
-  echo "#808080"
+  echo "$COLOR_LGRAY"
 else
   echo "󰂚"
+  echo "󰂚"
+  echo "$COLOR_WHITE"
 fi

@@ -50,11 +50,9 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
 fi
 
 color=$(threshold_color "$max_temp" "$TEMP_WARN" "$TEMP_CRIT")
-crit_color="$(threshold_color 1 0 0)"  # always red
-warn_color="$(threshold_color 1 0 2)"  # always yellow
-if [ "$color" = "$crit_color" ]; then
+if [ "$color" = "$COLOR_RED" ]; then
   icon=""
-elif [ "$color" = "$warn_color" ]; then
+elif [ "$color" = "$COLOR_YELLOW" ]; then
   icon=""
 else
   icon=""

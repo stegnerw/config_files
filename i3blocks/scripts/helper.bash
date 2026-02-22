@@ -3,6 +3,13 @@
 # Source this at the top of each block script:
 #   source "$(dirname "$0")/helper.bash"
 
+export COLOR_GREEN="#a3be8c"
+export COLOR_YELLOW="#ebcb8b"
+export COLOR_RED="#bf616a"
+export COLOR_WHITE="#ffffff"
+export COLOR_LGRAY="#a0a0a0"
+export COLOR_DGRAY="#808080"
+
 # Send a dunst notification with consistent formatting.
 # Usage: notify "Title" "Body"
 notify() {
@@ -18,8 +25,8 @@ notify() {
 
 # Return a hex color based on value and thresholds.
 # Usage: threshold_color <value> <warn> <crit> [invert]
-#   Normal:   value < warn = green, warn..crit = yellow, >= crit = red
-#   Inverted: value > warn = green, warn..crit = yellow, <= crit = red
+#   Normal:   value < warn = COLOR_GREEN, warn..crit = COLOR_YELLOW, >= crit = COLOR_RED
+#   Inverted: value > warn = COLOR_GREEN, warn..crit = COLOR_YELLOW, <= crit = COLOR_RED
 # Thresholds are inclusive on the critical end.
 threshold_color() {
   local value="$1"
@@ -27,12 +34,8 @@ threshold_color() {
   local crit="$3"
   local invert="${4:-}"
 
-  local green="#a3be8c"
-  local yellow="#ebcb8b"
-  local red="#bf616a"
-
   awk -v val="$value" -v warn="$warn" -v crit="$crit" \
-    -v inv="$invert" -v g="$green" -v y="$yellow" -v r="$red" \
+    -v inv="$invert" -v g="$COLOR_GREEN" -v y="$COLOR_YELLOW" -v r="$COLOR_RED" \
     'BEGIN {
         s = (inv != "") ? -1 : 1
         if (s * val >= s * crit) print r

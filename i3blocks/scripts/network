@@ -22,7 +22,7 @@ case "$iface" in
     speed=$(cat "/sys/class/net/$iface/speed" 2>/dev/null)
     [ -n "$speed" ] && body="$body\n$speed Mbit/s"
     icon="󰈁"
-    color=$(threshold_color 0 1 1) # always green
+    color="$COLOR_GREEN"
     ;;
   w*)
     ssid="$(iwgetid -r)"
@@ -39,7 +39,7 @@ case "$iface" in
   *)
     body="No active connection"
     icon="󰲜"
-    color=$(threshold_color 1 0 0) # always red
+    color="$COLOR_RED"
     ;;
 esac
 
