@@ -47,12 +47,12 @@ command=~/.config/i3blocks/scripts/temp
 interval=5
 signal=6
 
-#[ram]
-## Left click: show used/total
-#command=~/.config/i3blocks/scripts/ram
-#interval=5
-#signal=7
-#
+[ram]
+# Left click: show used/total
+command=~/.config/i3blocks/scripts/ram
+interval=5
+signal=7
+
 #[disk]
 ## Left click: show used/total
 #command=~/.config/i3blocks/scripts/disk
