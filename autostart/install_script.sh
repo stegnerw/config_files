@@ -7,6 +7,7 @@ AUTOSTART_DIR=$XDG_CONFIG_HOME/autostart
 # Create necessary directories
 mkdir -p $AUTOSTART_DIR
 
+ln -sf /usr/share/applications/bitwarden.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/discord.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/dropbox.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/org.flameshot.Flameshot.desktop "$AUTOSTART_DIR/"
