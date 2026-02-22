@@ -3,8 +3,8 @@ source "$(dirname "$0")/helper.bash"
 
 # --- Environment Variables ---
 
-RAM_WARN=${RAM_WARN:-60}
-RAM_CRIT=${RAM_CRIT:-85}
+RAM_WARN="${RAM_WARN:-60}"
+RAM_CRIT="${RAM_CRIT:-85}"
 
 # --- Core Logic ---
 
