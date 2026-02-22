@@ -1,5 +1,5 @@
 #!/bin/bash
-source "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/helper.sh"
 
 # Left click: toggle notification state
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then

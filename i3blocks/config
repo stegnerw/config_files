@@ -22,12 +22,12 @@ command=~/.config/i3blocks/scripts/notif
 interval=1
 signal=2
 
-#[network]
-## Left click: show full connection details
-#command=~/.config/i3blocks/scripts/network
-#interval=10
-#signal=3
-#
+[network]
+# Left click: show full connection details
+command=~/.config/i3blocks/scripts/network
+interval=10
+signal=3
+
 #[battery]
 ## Left click: show detailed battery info
 ## Outputs nothing on desktops (no separator rendered)

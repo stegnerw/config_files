@@ -1,0 +1,47 @@
+#!/bin/bash
+source "$(dirname "$0")/helper.sh"
+
+# Gather connection info. Prefer ethernet over wifi.
+iface=$(ip route show default | awk '{print $5; exit}')
+
+ip_addr=${iface:+$(ip -4 addr show "$iface" | awk '/inet / {print $2}')}
+
+title="Network${iface:+: ${iface}}"
+body="IP: ${ip_addr:-none}"
+
+# Build out detail text and format bar icon/color for each case
+case "$iface" in
+  e*)
+    speed=$(cat "/sys/class/net/$iface/speed" 2>/dev/null)
+    [ -n "$speed" ] && body="$body\n$speed Mbit/s"
+    icon="󰈁"
+    color=$(threshold_color 0 1 1) # always green
+    ;;
+  w*)
+    ssid="$(iwgetid -r)"
+    signal=$(awk 'NR==3 {printf "%.0f", $3 * 10 / 7}' \
+      "/proc/net/wireless" 2>/dev/null)
+    freq=$(iw dev "$iface" info |
+      awk '/channel/ {print $2 " (ch " $2 ")"}' 2>/dev/null)
+    body="SSID: ${ssid:-unknown}\n$body"
+    body="$body\nSignal: ${signal:-?}"
+    body="\nFreq: ${freq:-unknown}"
+    icon="󰖩"
+    color=$(threshold_color "${signal:-0}" 50 30 invert)
+    ;;
+  *)
+    body="No active connection"
+    icon="󰲜"
+    color=$(threshold_color 1 0 0) # always red
+    ;;
+esac
+
+# --- Main ---
+
+if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
+  notify "$title" "$body"
+fi
+
+echo "$icon"
+echo "$icon"
+echo "$color"

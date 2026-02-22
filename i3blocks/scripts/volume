@@ -2,7 +2,7 @@
 # Displays the default device, volume, and mute status for i3blocks
 # Modified from i3blocks-contrib/volume-pipewire:
 # https://github.com/vivien/i3blocks-contrib/tree/master/volume-pipewire
-source "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/helper.sh"
 
 # --- Environment Variables ---
 
