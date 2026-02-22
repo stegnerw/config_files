@@ -2,7 +2,7 @@
 
 # Directory definitions
 BASE_DIR=$(realpath $(dirname "$0"))
-BIN_DIR=$HOME/.bin
+BIN_DIR=$HOME/.local/bin
 
 # Create necessary directories
 mkdir -p $BIN_DIR
