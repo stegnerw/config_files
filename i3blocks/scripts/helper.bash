@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Shared helpers for i3blocks scripts.
 # Source this at the top of each block script:
 #   source "$(dirname "$0")/helper.sh"
