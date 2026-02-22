@@ -46,7 +46,7 @@ fi
 
 # Click: show per-sensor breakdown
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-  notify "Temperatures" "${sensor_details:-No sensors found}"
+  show_popup "Temperatures" "${sensor_details:-No sensors found}"
 fi
 
 color=$(threshold_color "$max_temp" "$TEMP_WARN" "$TEMP_CRIT")

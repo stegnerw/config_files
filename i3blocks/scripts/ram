@@ -21,7 +21,7 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
   used_gib=$(echo "scale=1; $mem_used / 1048576" | bc)
   total_gib=$(echo "scale=1; $mem_total / 1048576" | bc)
 
-  notify "Memory" \
+  show_popup "Memory" \
     "Used: ${used_gib} GiB / ${total_gib} GiB (${pct}%)"
 fi
 

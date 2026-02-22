@@ -27,7 +27,7 @@ fi
 
 # Click: show full details
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-  notify "Battery" \
+  show_popup "Battery" \
     "Status: ${status}\nCapacity: ${capacity}%\nRemaining: ${remaining:-unknown}"
 fi
 

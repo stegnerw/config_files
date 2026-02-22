@@ -32,7 +32,7 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
   total_hr=$(format_size "$total")
   avail_hr=$(format_size "$avail")
 
-  notify "Mount point: $mount_point" \
+  show_popup "Mount point: $mount_point" \
     "Used: ${used_hr} / ${total_hr} (${pct}%)\nAvail: ${avail_hr}"
 fi
 

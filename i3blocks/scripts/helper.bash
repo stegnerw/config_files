@@ -10,17 +10,14 @@ export COLOR_WHITE="#ffffff"
 export COLOR_LGRAY="#a0a0a0"
 export COLOR_DGRAY="#808080"
 
-# Send a dunst notification with consistent formatting.
-# Usage: notify "Title" "Body"
-notify() {
-  local title="$1"
+# Pop up a terminal pager with information
+# Usage: show_popup "Title" "Body"
+show_popup() {
+  local title="i3blocks_popup${1:+: $1}"
   local body="$2"
-  # -r requires a numeric ID for replacement; hash the block name
-  local replace_id
-  replace_id=$(( $(echo "${BLOCK_NAME:-i3blocks}" |
-    cksum | awk '{print $1}') % 2147483647 ))
-  notify-send -t 5000 -r "$replace_id" -a "i3blocks" -u critical \
-    "$title" "$body"
+  pkill -f "$title" 2>/dev/null
+  i3-sensible-terminal -T "$title" \
+    -e sh -c "echo -e '$body' | i3-sensible-pager" &
 }
 
 # Return a hex color based on value and thresholds.

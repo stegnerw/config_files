@@ -44,7 +44,7 @@ case "$iface" in
 esac
 
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
-  notify "$title" "$body"
+  show_popup "$title" "$body"
 fi
 
 echo "$icon"

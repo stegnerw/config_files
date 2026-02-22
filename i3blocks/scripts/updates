@@ -30,7 +30,7 @@ fi
 # Click: show package list with security details
 if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
   if [ "$update_count" -eq 0 ]; then
-    notify "Updates" "System is up to date"
+    show_popup "Updates" "System is up to date"
   else
     body=""
     if [ -n "$security_list" ]; then
@@ -40,7 +40,7 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
     pkg_list=$(printf '%s\n' "${updates[@]}" \
       | awk '{printf "%s %s → %s\n", $1, $2, $4}')
     body+="${pkg_list}"
-    notify "Updates ($update_count)" "$body"
+    show_popup "Updates ($update_count)" "$body"
   fi
 fi
 

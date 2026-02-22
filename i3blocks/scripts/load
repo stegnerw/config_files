@@ -19,7 +19,7 @@ if [ "$BLOCK_BUTTON" -eq 1 ] 2>/dev/null; then
     for (i=2; i<=NF; i++) total += $i;
     printf "%.0f", (1 - idle/total) * 100
   }' /proc/stat)
-  notify "System Load" \
+  show_popup "System Load" \
     "Load: ${load_string}\nCPU: ${cpu_usage}%\nCores: ${nproc}"
 fi
 
