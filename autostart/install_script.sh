@@ -13,7 +13,7 @@ ln -sf /usr/share/applications/dropbox.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/org.flameshot.Flameshot.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/org.keepassxc.KeePassXC.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/protonmail-bridge.desktop "$AUTOSTART_DIR/"
-ln -sf /usr/share/applications/signal-desktop.desktop "$AUTOSTART_DIR/"
+ln -sf /usr/share/applications/signal.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/spotify-launcher.desktop "$AUTOSTART_DIR/"
 ln -sf /usr/share/applications/thunderbird.desktop "$AUTOSTART_DIR/"
 
