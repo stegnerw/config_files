@@ -1,2 +1,3 @@
-# Configuration_Files
-My config files
+# Config Files
+
+My config files.
