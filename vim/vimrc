@@ -28,7 +28,8 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " LaTeX
 Plug 'lervag/vimtex'
 " Markdown
-"Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() },
+                                     \ 'for': ['markdown', 'vim-plug']}
 " NerdFonts
 Plug 'lambdalisue/nerdfont.vim'
 " Status bar
@@ -50,6 +51,24 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
+
+" Execute current file silently
+nnoremap <leader>r :call system(expand('%:p'))<CR>
+
+" Auto formatting
+autocmd BufWritePost *.py silent edit
+autocmd BufWritePost *.json silent edit
+augroup AutoFormat
+  autocmd!
+  autocmd BufWritePost *.json silent! call system('jq . ' . expand('%:p')
+    \ . ' > ' . expand('%:p') . '.tmp && mv ' . expand('%:p') . '.tmp '
+    \ . expand('%:p'))
+  autocmd BufWritePost *.md silent! call system('mdformat --wrap 80 '
+    \ . shellescape(expand('%')))
+  autocmd BufWritePost *.py silent! call system('isort ' . expand('%:p') .
+    \ ' && black -q ' . expand('%:p'))
+  autocmd BufWritePost *.json,*.md,*.py silent edit
+augroup END
 
 " Misc/unsorted
 set textwidth=80
@@ -144,6 +163,11 @@ let vim_markdown_peview_toggle = 2
 " Prevents vim from thinking a tex file is plaintex
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
+let g:vimtex_compiler_latexmk = {
+  \ 'options' : [
+  \   '-auxdir=latex.out',
+  \ ]
+  \ }
 " Order and usage requested by vim-tex
 syntax on
 
@@ -187,11 +211,10 @@ if executable('ccls')
     \ })
 endif
 
-" Abbreviations
-
-" Email
-iabbrev pm@@ wayne.stegner@protonmail.com
-" Copyright
-iabbrev ccopy Copyright 2022 Wayne Stegner, all rights reserved.
-" Signature
-iabbrev ssig --<cr>Wayne Stegner<cr>wayne.stegner@protonmail.com
+if executable('pyright-langserver')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'pyright',
+    \ 'cmd': {server_info->['pyright-langserver', '--stdio']},
+    \ 'allowlist': ['python'],
+    \ })
+endif
