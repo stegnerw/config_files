@@ -35,8 +35,6 @@ Plug 'lambdalisue/nerdfont.vim'
 " Status bar
 Plug 'itchyny/lightline.vim'
 "Plug 'josa42/vim-lightline-coc'
-" File browsing
-Plug 'preservim/nerdtree'
 " Git
 Plug 'airblade/vim-gitgutter'
 " PlatformIO
@@ -54,6 +52,10 @@ inoremap <down> <nop>
 
 " Execute current file silently
 nnoremap <leader>r :call system(expand('%:p'))<CR>
+
+" File tree view -- netrw
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3  " 3 = tree view
 
 " Auto formatting
 autocmd BufWritePost *.py silent edit
@@ -183,15 +185,6 @@ set noshowmode
 let g:lightline = {
   \ 'colorscheme': 'darcula',
   \ }
-
-" NERDTree
-nnoremap <leader>nn :NERDTreeFocus<CR>
-nnoremap <leader>ns :NERDTree<CR>
-nnoremap <leader>nt :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFind<CR>
-" Exit Vim if NERDTree is the only window left
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1
-    \ && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " Gitgutter
 set updatetime=100 " Update every 100 ms(also controls swap file)
