@@ -11,11 +11,11 @@ if [ "$count" -eq 0 ]; then
 fi
 
 mon1=$(echo "$outputs" | head -1)
-xrandr --output "$mon1" --primary --auto
+xrandr --output "$mon1" --primary --auto --set TearFree on
 
 if [ "$count" -ge 2 ]; then
   mon2=$(echo "$outputs" | sed -n '2p')
-  xrandr --output "$mon2" --right-of "$mon1" --auto
+  xrandr --output "$mon2" --right-of "$mon1" --auto --set TearFree on
 else
   mon2=""
 fi

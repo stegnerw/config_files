@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Version=1.5
-Name=monitor_setup.sh
+Name=monitors
 Comment=Script to set up monitors
-Exec=monitor_setup.sh
+Exec=monitors
 Terminal=false
